@@ -14,8 +14,8 @@ The requirements for this App are as follows:
 
 - You should use DTOs to show the flashcards to the user without the Id of the stack it belongs to.
 
- -When showing a stack to the user, the flashcard Ids should always start with 1 without gaps between them. 
-  If you have 10 cards and number 5 is deleted, the table should show Ids from 1 to 9.
+ - When showing a stack to the user, the flashcard Ids should always start with 1 without gaps between them. 
+   If you have 10 cards and number 5 is deleted, the table should show Ids from 1 to 9.
 
 - After creating the flashcards functionalities, create a "Study Session" area, where the users will study the stacks. 
   All study sessions should be stored, with date and score.
