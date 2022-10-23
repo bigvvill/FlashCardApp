@@ -127,6 +127,8 @@ namespace FlashCardApp
 
         private void DeleteStack()
         {
+            string stackToDelete = "";
+
             Console.Clear();
             try
             {
@@ -149,10 +151,10 @@ namespace FlashCardApp
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
-            }            
-
+            }
+            
             Console.WriteLine("Which stack would you like to delete? Type 0 to go back to Menu.");
-            string stackToDelete = Console.ReadLine();
+            stackToDelete = Console.ReadLine();
 
             while (string.IsNullOrEmpty(stackToDelete))
             {
@@ -160,13 +162,16 @@ namespace FlashCardApp
                 stackToDelete = Console.ReadLine();
             }
 
+            if (stackToDelete == "0")
+            {
+                ManageStacks();
+            }
+
             try
             {
 
                 SqlConnection sqlConnection = new SqlConnection(connectionString);
                 sqlConnection.Open();
-
-
 
                 string displayStackQuery = $"DELETE FROM cardstacks WHERE cardstackname ='{stackToDelete}' select @@ROWCOUNT;";
                 SqlCommand getStacks = new SqlCommand(displayStackQuery, sqlConnection); 
@@ -178,41 +183,82 @@ namespace FlashCardApp
                     while (stackToDelete != "0")
                     {
                         Console.WriteLine($"There is no stack named {stackToDelete}. Please enter a valid stack.");
-                        stackToDelete = Console.ReadLine();
+                        Console.ReadLine();
                         DeleteStack();
                     }
                     
                 }
+
+                Console.WriteLine($"Stack Name {stackToDelete} has been deleted. Press Enter...");
+                Console.ReadLine();
+                DeleteStack();
             }
             catch (Exception e)
             {
-
                 Console.WriteLine(e.Message);
             }
         }
 
         private void CreateStack()
         {
+            string newStackName = "";
+
+            SqlConnection sqlConnection = new SqlConnection(connectionString);
+            sqlConnection.Open();
+
+            Console.Clear();
             try
             {
+                Console.WriteLine("---STACKS----");
+                Console.WriteLine("-------------");
+
                 sqlConnection = new SqlConnection(connectionString);
                 sqlConnection.Open();
 
-                Console.WriteLine("Enter Name for New Stack:");
-                string newStackName = Console.ReadLine();
-
-                string insertQuery = $"INSERT INTO cardstacks(cardstackname) VALUES('{newStackName}')";
-                SqlCommand insertStackName = new SqlCommand(insertQuery, sqlConnection);
-                insertStackName.ExecuteNonQuery();
+                string displayStackQuery = $"SELECT * FROM cardstacks";
+                SqlCommand getStacks = new SqlCommand(displayStackQuery, sqlConnection);
+                SqlDataReader reader = getStacks.ExecuteReader();
+                while (reader.Read())
+                {
+                    Console.WriteLine($"{reader.GetValue(1)}");
+                    Console.WriteLine("-------------");
+                }
                 sqlConnection.Close();
-
-                Console.WriteLine($"New stack {newStackName} has been created.");
-                Console.ReadLine();
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
+            }                            
+
+            Console.WriteLine("Enter Name for New Stack or 0 to return to Menu");
+            newStackName = Console.ReadLine();
+
+            while (string.IsNullOrEmpty(newStackName))
+            {
+                Console.WriteLine("\nInvalid Command. Please enter the stack name or 0 to go back to Menu.\n");
+                newStackName = Console.ReadLine();
             }
+
+            if (newStackName == "0")
+            {
+                ManageStacks();
+            }
+
+            sqlConnection = new SqlConnection(connectionString);
+            sqlConnection.Open();
+
+            string insertQuery = $"INSERT INTO cardstacks(cardstackname) VALUES('{newStackName}')";
+            SqlCommand insertStackName = new SqlCommand(insertQuery, sqlConnection);
+            insertStackName.ExecuteNonQuery();
+            sqlConnection.Close();
+
+            Console.WriteLine($"New stack {newStackName} has been created. Press Enter...");
+            Console.ReadLine();
+
+            sqlConnection.Close();
+
+            CreateStack();
+            
         }
     }
 }
