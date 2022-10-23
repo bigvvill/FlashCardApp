@@ -8,7 +8,9 @@ namespace FlashCardApp.Models
 {
     internal class CardStack
     {
-        public int CardStackID { get; set; }
+        public int Id { get; set; }
         public string CardStackName { get; set; }
+
+        public virtual Card Cards { get; set; }
     }
 }

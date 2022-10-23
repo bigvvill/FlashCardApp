@@ -9,7 +9,7 @@ namespace FlashCardApp
 {
     internal class GetUserInput
     {
-        private SqlConnection sqlConnection;
+        //private SqlConnection sqlConnection;
         private string connectionString = @"Data Source=WILL-PC\NEW2019;Initial Catalog=FlashCardDb;Integrated Security=True";        
 
         internal void MainMenu()
@@ -182,7 +182,7 @@ namespace FlashCardApp
                 {
                     while (stackToDelete != "0")
                     {
-                        Console.WriteLine($"There is no stack named {stackToDelete}. Please enter a valid stack.");
+                        Console.WriteLine($"There is no stack named {stackToDelete}. Please enter a valid stack. Press Enter...");
                         Console.ReadLine();
                         DeleteStack();
                     }
@@ -247,17 +247,28 @@ namespace FlashCardApp
             sqlConnection = new SqlConnection(connectionString);
             sqlConnection.Open();
 
-            string insertQuery = $"INSERT INTO cardstacks(cardstackname) VALUES('{newStackName}')";
-            SqlCommand insertStackName = new SqlCommand(insertQuery, sqlConnection);
-            insertStackName.ExecuteNonQuery();
-            sqlConnection.Close();
+            try
+            {
+                string insertQuery = $"INSERT INTO cardstacks(cardstackname) VALUES('{newStackName}')";
+                SqlCommand insertStackName = new SqlCommand(insertQuery, sqlConnection);
+                insertStackName.ExecuteNonQuery();
+                sqlConnection.Close();
 
-            Console.WriteLine($"New stack {newStackName} has been created. Press Enter...");
-            Console.ReadLine();
+                Console.WriteLine($"New stack {newStackName} has been created. Press Enter...");
+                Console.ReadLine();
 
-            sqlConnection.Close();
+                sqlConnection.Close();
 
-            CreateStack();
+                CreateStack();
+            }
+            catch (Exception)
+            {
+
+                Console.WriteLine($"Stack Name {newStackName} already exists. Please use another name. Press Enter...");
+                Console.ReadLine();
+                CreateStack();
+            }
+            
             
         }
     }
