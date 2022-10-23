@@ -31,7 +31,7 @@ namespace FlashCardApp
 
                 while (string.IsNullOrEmpty(menuSelection))
                 {
-                    Console.WriteLine("\nInvalid Command. Please type a number from 0 to 3.\n");
+                    Console.WriteLine("\nInvalid Selection. Please type a number from 0 to 3.\n");
                     menuSelection = Console.ReadLine();
                 }
 
@@ -55,8 +55,9 @@ namespace FlashCardApp
                     //    ViewData();
                     //    break;
                     default:
-                        Console.WriteLine("\nInvalid Command. Please type a number from 0 to 3.\n");
+                        Console.WriteLine("\nInvalid Selection. Please type a number from 0 to 3.\nPress Enter...\n");
                         Console.ReadLine();
+                        MainMenu();
                         break;
                 }
             }            
@@ -100,7 +101,7 @@ namespace FlashCardApp
 
             while (string.IsNullOrEmpty(stackInput))
             {
-                Console.WriteLine("\nInvalid Command. Please type a number from 0 to 3.\n");
+                Console.WriteLine("\nInvalid Selection. Please type a number from 0 to 3.\n");
                 stackInput = Console.ReadLine();
             }
 
@@ -119,8 +120,9 @@ namespace FlashCardApp
                 //    UpdateStack();
                 //    break;
                 default:
-                    Console.WriteLine("\nInvalid Command. Please type a number from 0 to 3.\n");
+                    Console.WriteLine("\nInvalid Selection. Please type a number from 0 to 3.\nPress Enter...\n");
                     Console.ReadLine();
+                    ManageStacks();
                     break;
             }
         }
@@ -158,7 +160,7 @@ namespace FlashCardApp
 
             while (string.IsNullOrEmpty(stackToDelete))
             {
-                Console.WriteLine("\nInvalid Command. Please enter the stack name or 0 to go back to Menu.\n");
+                Console.WriteLine("\nInvalid Entry. Please enter the stack name or 0 to go back to Menu.\n");
                 stackToDelete = Console.ReadLine();
             }
 
@@ -182,14 +184,14 @@ namespace FlashCardApp
                 {
                     while (stackToDelete != "0")
                     {
-                        Console.WriteLine($"There is no stack named {stackToDelete}. Please enter a valid stack. Press Enter...");
+                        Console.WriteLine($"There is no stack named {stackToDelete}. Please enter a valid stack.\nPress Enter...");
                         Console.ReadLine();
                         DeleteStack();
                     }
                     
                 }
 
-                Console.WriteLine($"Stack Name {stackToDelete} has been deleted. Press Enter...");
+                Console.WriteLine($"Stack Name {stackToDelete} has been deleted.\nPress Enter...");
                 Console.ReadLine();
                 DeleteStack();
             }
@@ -235,7 +237,7 @@ namespace FlashCardApp
 
             while (string.IsNullOrEmpty(newStackName))
             {
-                Console.WriteLine("\nInvalid Command. Please enter the stack name or 0 to go back to Menu.\n");
+                Console.WriteLine("\nInvalid Entry. Please enter the stack name or 0 to go back to Menu.\n");
                 newStackName = Console.ReadLine();
             }
 
@@ -254,7 +256,7 @@ namespace FlashCardApp
                 insertStackName.ExecuteNonQuery();
                 sqlConnection.Close();
 
-                Console.WriteLine($"New stack {newStackName} has been created. Press Enter...");
+                Console.WriteLine($"New stack {newStackName} has been created.\nPress Enter...");
                 Console.ReadLine();
 
                 sqlConnection.Close();
@@ -264,7 +266,7 @@ namespace FlashCardApp
             catch (Exception)
             {
 
-                Console.WriteLine($"Stack Name {newStackName} already exists. Please use another name. Press Enter...");
+                Console.WriteLine($"Stack Name {newStackName} already exists. Please use another name.\nPress Enter...");
                 Console.ReadLine();
                 CreateStack();
             }
