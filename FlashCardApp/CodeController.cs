@@ -9,8 +9,8 @@ namespace FlashCardApp
 {
     internal class CodeController
     {
-        SqlConnection sqlConnection;
-        string connectionString = @"Data Source=WILL-PC\NEW2019;Initial Catalog=FlashCardDb;Integrated Security=True";
+        //SqlConnection sqlConnection;
+        //string connectionString = @"Data Source=WILL-PC\NEW2019;Initial Catalog=FlashCardDb;Integrated Security=True";
 
 
     }
