@@ -10,9 +10,8 @@ using System.Threading.Tasks;
 namespace FlashCardApp
 {
     internal class GetUserInput
-    {
-        //private SqlConnection sqlConnection;
-        private string connectionString = @"Data Source=WILL-PC\NEW2019;Initial Catalog=FlashCardDb;Integrated Security=True";        
+    {        
+        CodeController codeController = new CodeController();
 
         internal void MainMenu()
         {            
@@ -66,7 +65,7 @@ namespace FlashCardApp
             }            
         }
 
-        private void ManageStacks()
+        public void ManageStacks()
         {
             DisplayTable displayTable = new DisplayTable();
             displayTable.DisplayStack();
@@ -93,10 +92,10 @@ namespace FlashCardApp
                     MainMenu();
                     break;
                 case "1":
-                    CreateStack();
+                    codeController.CreateStack();
                     break;
                 case "2":
-                    DeleteStack();
+                    codeController.DeleteStack();
                     break;
                 //case "3":
                 //    UpdateStack();
@@ -109,110 +108,28 @@ namespace FlashCardApp
             }
         }
 
-        private void DeleteStack()
-        {
-            string stackToDelete = "";
+        //public void ManageCards()
+        //{
+        //    GetUserInput getUserInput = new GetUserInput();
+        //    DisplayTable displayTable = new DisplayTable();
+        //    displayTable.DisplayStack();            
 
-            DisplayTable displayTable = new DisplayTable();
-            displayTable.DisplayStack();            
-            
-            Console.WriteLine("Which stack would you like to delete? Type 0 to go back to Menu.");
-            stackToDelete = Console.ReadLine();
+        //    Console.WriteLine("\nWhich stack would you like to delete? Type 0 to go back to Menu.");
+        //    string stackSelection = Console.ReadLine();
 
-            while (string.IsNullOrEmpty(stackToDelete))
-            {
-                Console.WriteLine("\nInvalid Entry. Please enter the stack name or 0 to go back to Menu.\n");
-                stackToDelete = Console.ReadLine();
-            }
+        //    while (string.IsNullOrEmpty(stackSelection))
+        //    {
+        //        Console.WriteLine("\nInvalid Entry. Please enter the stack name or 0 to go back to Menu.\n");
+        //        stackSelection = Console.ReadLine();
+        //    }
 
-            if (stackToDelete == "0")
-            {
-                ManageStacks();
-            }
+        //    if (stackSelection == "0")
+        //    {
+        //        getUserInput.ManageStacks();
+        //    }
+        //}
 
-            Console.WriteLine($"Are you sure you want to delete the stack {stackToDelete}?\nTypo \"Yes\" to delete or any other key to go back.");
-            string confirmDelete = Console.ReadLine();
 
-            if (confirmDelete == "Yes")
-            {
-                try
-                {
-                    SqlConnection sqlConnection = new SqlConnection(connectionString);
-                    sqlConnection.Open();
-
-                    string displayStackQuery = $"DELETE FROM cardstacks WHERE cardstackname ='{stackToDelete}' select @@ROWCOUNT;";
-                    SqlCommand getStacks = new SqlCommand(displayStackQuery, sqlConnection);
-                    int rc = getStacks.ExecuteNonQuery();
-                    sqlConnection.Close();
-
-                    if (rc == 0)
-                    {
-                        while (stackToDelete != "0")
-                        {
-                            Console.WriteLine($"There is no stack named {stackToDelete}. Please enter a valid stack.\nPress Enter...");
-                            Console.ReadLine();
-                            DeleteStack();
-                        }
-                    }
-
-                    Console.WriteLine($"Stack Name {stackToDelete} has been deleted.\nPress Enter...");
-                    Console.ReadLine();
-                    DeleteStack();
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e.Message);
-                }
-            }
-
-            else DeleteStack();
-            
-        }
-
-        private void CreateStack()
-        {
-            string newStackName = "";
-
-            DisplayTable displayTable = new DisplayTable();
-            displayTable.DisplayStack();                              
-
-            Console.WriteLine("Enter Name for New Stack or 0 to return to Menu");
-            newStackName = Console.ReadLine();
-
-            while (string.IsNullOrEmpty(newStackName))
-            {
-                Console.WriteLine("\nInvalid Entry. Please enter the stack name or 0 to go back to Menu.\n");
-                newStackName = Console.ReadLine();
-            }
-
-            if (newStackName == "0")
-            {
-                ManageStacks();
-            }            
-
-            try
-            {
-                SqlConnection sqlConnection = new SqlConnection(connectionString);
-                sqlConnection.Open();
-
-                string insertQuery = $"INSERT INTO cardstacks(cardstackname) VALUES('{newStackName}')";
-                SqlCommand insertStackName = new SqlCommand(insertQuery, sqlConnection);
-                insertStackName.ExecuteNonQuery();
-                sqlConnection.Close();
-
-                Console.WriteLine($"New stack {newStackName} has been created.\nPress Enter...");
-                Console.ReadLine();
-
-                sqlConnection.Close();
-
-                CreateStack();
-            }
-            catch (Exception)
-            {
-                Console.WriteLine($"Stack Name {newStackName} already exists. Please use another name.\nPress Enter...");
-                Console.ReadLine();
-                CreateStack();
-            }            
-        }
+        //}
     }
 }

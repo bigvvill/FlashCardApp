@@ -37,7 +37,6 @@ namespace FlashCardApp
                                     });
                                 }
                             }
-
                             else
                             {
                                 Console.WriteLine("\nNo rows found.\n");
