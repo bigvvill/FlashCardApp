@@ -53,5 +53,54 @@ namespace FlashCardApp
                 Console.WriteLine(e.Message);
             }
         }
+
+        internal void DisplayCardList()
+        {
+            try
+            {
+                List<CardListReadOnlyDto> tableData = new List<CardListReadOnlyDto>();
+                using (var connection = new SqlConnection(connectionString))
+                {
+                    using (var tableCmd = connection.CreateCommand())
+                    {
+                        connection.Open();
+                        tableCmd.CommandText = "SELECT * FROM cards";
+
+                        using (var stackReader = tableCmd.ExecuteReader())
+                        {
+                            int listNumber = 1;
+
+                            if (stackReader.HasRows)
+                            {
+                                while (stackReader.Read())
+                                {
+                                    
+                                    tableData.Add(
+                                    new CardListReadOnlyDto
+                                    {
+                                        CardLabelNumber = listNumber,
+                                        CardFront = stackReader.GetString(1),
+                                        CardBack = stackReader.GetString(2)
+                                    });
+
+                                    listNumber++;
+                                }
+                            }
+                            else
+                            {
+                                Console.WriteLine("\nNo rows found.\n");
+                            }
+                        }
+                    }
+
+                    Console.Clear();
+                    FormatTable.ShowStackTable(tableData);
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+        }
     }
 }

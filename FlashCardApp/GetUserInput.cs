@@ -47,9 +47,9 @@ namespace FlashCardApp
                     case "1":
                         ManageStacks();
                         break;
-                    //case "2":
-                    //    ManageCards();
-                    //    break;
+                    case "2":
+                        ManageCards();
+                        break;
                     //case "2":
                     //    StudySession();
                     //    break;
@@ -108,28 +108,30 @@ namespace FlashCardApp
             }
         }
 
-        //public void ManageCards()
-        //{
-        //    GetUserInput getUserInput = new GetUserInput();
-        //    DisplayTable displayTable = new DisplayTable();
-        //    displayTable.DisplayStack();            
+        public void ManageCards()
+        {
+            GetUserInput getUserInput = new GetUserInput();
+            DisplayTable displayTable = new DisplayTable();
+            displayTable.DisplayCardList();
 
-        //    Console.WriteLine("\nWhich stack would you like to delete? Type 0 to go back to Menu.");
-        //    string stackSelection = Console.ReadLine();
+            Console.WriteLine("\nWhich stack would you like to manage? Type 0 to go back to Menu.");
+            string stackSelection = Console.ReadLine();
 
-        //    while (string.IsNullOrEmpty(stackSelection))
-        //    {
-        //        Console.WriteLine("\nInvalid Entry. Please enter the stack name or 0 to go back to Menu.\n");
-        //        stackSelection = Console.ReadLine();
-        //    }
+            while (string.IsNullOrEmpty(stackSelection))
+            {
+                Console.WriteLine("\nInvalid Entry. Please enter the stack name or 0 to go back to Menu.\n");
+                stackSelection = Console.ReadLine();
+            }
 
-        //    if (stackSelection == "0")
-        //    {
-        //        getUserInput.ManageStacks();
-        //    }
-        //}
+            if (stackSelection == "0")
+            {
+                getUserInput.MainMenu();
+            }
 
 
-        //}
+        }
+
+
     }
 }
+
