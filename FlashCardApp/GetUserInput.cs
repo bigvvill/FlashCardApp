@@ -1,4 +1,6 @@
-﻿using System;
+﻿using FlashCardApp.Dtos.CardStack;
+using FlashCardApp.Models;
+using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
@@ -23,8 +25,9 @@ namespace FlashCardApp
                 Console.WriteLine("---------------------------");
                 Console.WriteLine("0 - Exit");
                 Console.WriteLine("1 - Manage Stacks");
-                Console.WriteLine("2 - Study");
-                Console.WriteLine("3 - View Study Session Data");
+                Console.WriteLine("2 - Manage Cards");
+                Console.WriteLine("3 - Study");
+                Console.WriteLine("4 - View Study Session Data");
                 Console.WriteLine("---------------------------");
 
                 string menuSelection = Console.ReadLine();
@@ -65,29 +68,8 @@ namespace FlashCardApp
 
         private void ManageStacks()
         {
-            Console.Clear();
-            try
-            {
-                Console.WriteLine("---STACKS----");
-                Console.WriteLine("-------------");
-
-                SqlConnection sqlConnection = new SqlConnection(connectionString);
-                sqlConnection.Open();
-
-                string displayStackQuery = $"SELECT * FROM cardstacks";
-                SqlCommand getStacks = new SqlCommand(displayStackQuery, sqlConnection);
-                SqlDataReader reader = getStacks.ExecuteReader();
-                while (reader.Read())
-                {
-                    Console.WriteLine($"{reader.GetValue(1)}");
-                    Console.WriteLine("-------------");
-                }
-                sqlConnection.Close();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-            }
+            DisplayTable displayTable = new DisplayTable();
+            displayTable.DisplayStack();
 
             //Console.WriteLine("-------------");
             Console.WriteLine("\n");
@@ -131,29 +113,8 @@ namespace FlashCardApp
         {
             string stackToDelete = "";
 
-            Console.Clear();
-            try
-            {
-                Console.WriteLine("---STACKS----");
-                Console.WriteLine("-------------");
-
-                SqlConnection sqlConnection = new SqlConnection(connectionString);
-                sqlConnection.Open();
-
-                string displayStackQuery = $"SELECT * FROM cardstacks";
-                SqlCommand getStacks = new SqlCommand(displayStackQuery, sqlConnection);
-                SqlDataReader reader = getStacks.ExecuteReader();
-                while (reader.Read())
-                {
-                    Console.WriteLine($"{reader.GetValue(1)}");
-                    Console.WriteLine("-------------");
-                }
-                sqlConnection.Close();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-            }
+            DisplayTable displayTable = new DisplayTable();
+            displayTable.DisplayStack();            
             
             Console.WriteLine("Which stack would you like to delete? Type 0 to go back to Menu.");
             stackToDelete = Console.ReadLine();
@@ -169,68 +130,51 @@ namespace FlashCardApp
                 ManageStacks();
             }
 
-            try
+            Console.WriteLine($"Are you sure you want to delete the stack {stackToDelete}?\nTypo \"Yes\" to delete or any other key to go back.");
+            string confirmDelete = Console.ReadLine();
+
+            if (confirmDelete == "Yes")
             {
-
-                SqlConnection sqlConnection = new SqlConnection(connectionString);
-                sqlConnection.Open();
-
-                string displayStackQuery = $"DELETE FROM cardstacks WHERE cardstackname ='{stackToDelete}' select @@ROWCOUNT;";
-                SqlCommand getStacks = new SqlCommand(displayStackQuery, sqlConnection); 
-                int rc = getStacks.ExecuteNonQuery();
-                sqlConnection.Close();
-
-                if (rc == 0)
+                try
                 {
-                    while (stackToDelete != "0")
-                    {
-                        Console.WriteLine($"There is no stack named {stackToDelete}. Please enter a valid stack.\nPress Enter...");
-                        Console.ReadLine();
-                        DeleteStack();
-                    }
-                    
-                }
+                    SqlConnection sqlConnection = new SqlConnection(connectionString);
+                    sqlConnection.Open();
 
-                Console.WriteLine($"Stack Name {stackToDelete} has been deleted.\nPress Enter...");
-                Console.ReadLine();
-                DeleteStack();
+                    string displayStackQuery = $"DELETE FROM cardstacks WHERE cardstackname ='{stackToDelete}' select @@ROWCOUNT;";
+                    SqlCommand getStacks = new SqlCommand(displayStackQuery, sqlConnection);
+                    int rc = getStacks.ExecuteNonQuery();
+                    sqlConnection.Close();
+
+                    if (rc == 0)
+                    {
+                        while (stackToDelete != "0")
+                        {
+                            Console.WriteLine($"There is no stack named {stackToDelete}. Please enter a valid stack.\nPress Enter...");
+                            Console.ReadLine();
+                            DeleteStack();
+                        }
+                    }
+
+                    Console.WriteLine($"Stack Name {stackToDelete} has been deleted.\nPress Enter...");
+                    Console.ReadLine();
+                    DeleteStack();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                }
             }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-            }
+
+            else DeleteStack();
+            
         }
 
         private void CreateStack()
         {
             string newStackName = "";
 
-            SqlConnection sqlConnection = new SqlConnection(connectionString);
-            sqlConnection.Open();
-
-            Console.Clear();
-            try
-            {
-                Console.WriteLine("---STACKS----");
-                Console.WriteLine("-------------");
-
-                sqlConnection = new SqlConnection(connectionString);
-                sqlConnection.Open();
-
-                string displayStackQuery = $"SELECT * FROM cardstacks";
-                SqlCommand getStacks = new SqlCommand(displayStackQuery, sqlConnection);
-                SqlDataReader reader = getStacks.ExecuteReader();
-                while (reader.Read())
-                {
-                    Console.WriteLine($"{reader.GetValue(1)}");
-                    Console.WriteLine("-------------");
-                }
-                sqlConnection.Close();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-            }                            
+            DisplayTable displayTable = new DisplayTable();
+            displayTable.DisplayStack();                              
 
             Console.WriteLine("Enter Name for New Stack or 0 to return to Menu");
             newStackName = Console.ReadLine();
@@ -244,13 +188,13 @@ namespace FlashCardApp
             if (newStackName == "0")
             {
                 ManageStacks();
-            }
-
-            sqlConnection = new SqlConnection(connectionString);
-            sqlConnection.Open();
+            }            
 
             try
             {
+                SqlConnection sqlConnection = new SqlConnection(connectionString);
+                sqlConnection.Open();
+
                 string insertQuery = $"INSERT INTO cardstacks(cardstackname) VALUES('{newStackName}')";
                 SqlCommand insertStackName = new SqlCommand(insertQuery, sqlConnection);
                 insertStackName.ExecuteNonQuery();
@@ -265,13 +209,10 @@ namespace FlashCardApp
             }
             catch (Exception)
             {
-
                 Console.WriteLine($"Stack Name {newStackName} already exists. Please use another name.\nPress Enter...");
                 Console.ReadLine();
                 CreateStack();
-            }
-            
-            
+            }            
         }
     }
 }
