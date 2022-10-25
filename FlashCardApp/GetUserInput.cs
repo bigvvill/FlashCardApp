@@ -11,7 +11,8 @@ namespace FlashCardApp
 {
     internal class GetUserInput
     {        
-        CodeController codeController = new CodeController();
+        StackController stackController = new StackController();
+        CardController cardController = new CardController();
 
         internal void MainMenu()
         {            
@@ -48,7 +49,7 @@ namespace FlashCardApp
                         ManageStacks();
                         break;
                     case "2":
-                        ManageCards();
+                        cardController.ManageCards();
                         break;
                     //case "2":
                     //    StudySession();
@@ -92,10 +93,10 @@ namespace FlashCardApp
                     MainMenu();
                     break;
                 case "1":
-                    codeController.CreateStack();
+                    stackController.CreateStack();
                     break;
                 case "2":
-                    codeController.DeleteStack();
+                    stackController.DeleteStack();
                     break;
                 //case "3":
                 //    UpdateStack();
@@ -108,28 +109,33 @@ namespace FlashCardApp
             }
         }
 
-        public void ManageCards()
-        {
-            GetUserInput getUserInput = new GetUserInput();
-            DisplayTable displayTable = new DisplayTable();
-            displayTable.DisplayCardList();
-
-            Console.WriteLine("\nWhich stack would you like to manage? Type 0 to go back to Menu.");
-            string stackSelection = Console.ReadLine();
-
-            while (string.IsNullOrEmpty(stackSelection))
-            {
-                Console.WriteLine("\nInvalid Entry. Please enter the stack name or 0 to go back to Menu.\n");
-                stackSelection = Console.ReadLine();
-            }
-
-            if (stackSelection == "0")
-            {
-                getUserInput.MainMenu();
-            }
+        
 
 
-        }
+
+
+
+
+            //GetUserInput getUserInput = new GetUserInput();
+            //DisplayTable displayTable = new DisplayTable();
+            //displayTable.DisplayCardList();
+
+            //Console.WriteLine("\nWhich stack would you like to manage? Type 0 to go back to Menu.");
+            //string stackSelection = Console.ReadLine();
+
+            //while (string.IsNullOrEmpty(stackSelection))
+            //{
+            //    Console.WriteLine("\nInvalid Entry. Please enter the stack name or 0 to go back to Menu.\n");
+            //    stackSelection = Console.ReadLine();
+            //}
+
+            //if (stackSelection == "0")
+            //{
+            //    getUserInput.MainMenu();
+            //}
+
+
+        
 
 
     }

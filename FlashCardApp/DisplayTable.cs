@@ -54,7 +54,7 @@ namespace FlashCardApp
             }
         }
 
-        internal void DisplayCardList()
+        internal void DisplayCardList(int selection)
         {
             try
             {
@@ -64,7 +64,7 @@ namespace FlashCardApp
                     using (var tableCmd = connection.CreateCommand())
                     {
                         connection.Open();
-                        tableCmd.CommandText = "SELECT * FROM cards";
+                        tableCmd.CommandText = $"SELECT * FROM cards WHERE stackId = {selection};";
 
                         using (var stackReader = tableCmd.ExecuteReader())
                         {

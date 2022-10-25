@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace FlashCardApp
 {
-    internal class CodeController
+    internal class StackController
     {
         private string connectionString = @"Data Source=WILL-PC\NEW2019;Initial Catalog=FlashCardDb;Integrated Security=True";
 
