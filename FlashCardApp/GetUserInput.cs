@@ -124,8 +124,8 @@ namespace FlashCardApp
             Console.WriteLine("0 - Return to Main Menu");
             Console.WriteLine("1 - Change Current Stack");
             Console.WriteLine("2 - Create a Flashcard in Current Stack");
-            Console.WriteLine("3 - Edit a Flashcard");
-            Console.WriteLine("4 - Delete a Flashcard");  
+            Console.WriteLine("3 - Edit a Flashcard in Current Stack");
+            Console.WriteLine("4 - Delete a Flashcard in Current Stack");  
 
             string cardInput = Console.ReadLine();
 

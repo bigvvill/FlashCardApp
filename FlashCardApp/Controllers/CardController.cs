@@ -116,7 +116,7 @@ namespace FlashCardApp.Controllers
                     string insertQuery = $"DELETE FROM cards WHERE Id = {cardList[cardId - 1].Id};";
                     SqlCommand insertCard = new SqlCommand(insertQuery, connection);
                     insertCard.ExecuteNonQuery();
-                    connection.Close();
+                    //connection.Close();
 
                     Console.WriteLine("Card Deleted. Press Enter...");
                     Console.ReadLine();
