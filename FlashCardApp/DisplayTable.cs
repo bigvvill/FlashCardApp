@@ -103,5 +103,10 @@ namespace FlashCardApp
                 Console.WriteLine(e.Message);
             }
         }
+
+        internal void DisplayData()
+        {
+
+        }
     }
 }

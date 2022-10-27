@@ -15,7 +15,10 @@ namespace FlashCardApp
         private string connectionString = @"Data Source=WILL-PC\NEW2019;Initial Catalog=FlashCardDb;Integrated Security=True";
 
         internal void MainMenu()
-        {            
+        {
+            DisplayTable displayTable = new DisplayTable();
+            StudyController studyController = new StudyController();
+
             bool closeApp = false;
             while (!closeApp)
             {
@@ -51,12 +54,12 @@ namespace FlashCardApp
                     case "2":
                         SelectStack();
                         break;
-                    //case "2":
-                    //    studyController.StudySession();
-                    //    break;
-                    //case "3":
-                    //    displayData.ViewData();
-                    //    break;
+                    case "2":
+                        studyController.StudySession(); // TODO : Create Study Session
+                        break;
+                    case "3":
+                        displayTable.DisplayData();  // TODO : Create Display Data
+                        break;
                     default:
                         Console.WriteLine("\nInvalid Selection. Please type a number from 0 to 3.\nPress Enter...\n");
                         Console.ReadLine();
