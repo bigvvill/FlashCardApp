@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FlashCardApp
+namespace FlashCardApp.Controllers
 {
     internal class StackController
     {
@@ -20,7 +20,7 @@ namespace FlashCardApp
             DisplayTable displayTable = new DisplayTable();
             displayTable.DisplayStack();
 
-            Console.WriteLine("\nEnter Name for New Stack or 0 to return to Menu");
+            Console.WriteLine("\nEnter Name for New Stack or 0 to go back to Menu");
             newStackName = Console.ReadLine();
 
             while (string.IsNullOrEmpty(newStackName))
@@ -31,7 +31,7 @@ namespace FlashCardApp
 
             if (newStackName == "0")
             {
-                getUserInput.ManageStacks();
+                getUserInput.StackMenu();
             }
 
             try
@@ -76,9 +76,9 @@ namespace FlashCardApp
 
             if (stackToDelete == "0")
             {
-                getUserInput.ManageStacks();
+                getUserInput.StackMenu();
             }
-
+            Console.WriteLine("WARNING! This will delete all associated cards!");
             Console.WriteLine($"Are you sure you want to delete the stack {stackToDelete}?\nTypo \"Yes\" to delete or any other key to go back.");
             string confirmDelete = Console.ReadLine();
 
@@ -114,6 +114,6 @@ namespace FlashCardApp
                 }
             }
             else DeleteStack();
-        }        
+        }
     }
 }

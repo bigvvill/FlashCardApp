@@ -1,4 +1,5 @@
-﻿using FlashCardApp.Dtos.CardStack;
+﻿using FlashCardApp.Controllers;
+using FlashCardApp.Dtos.CardStack;
 using FlashCardApp.Models;
 using System;
 using System.Collections.Generic;
@@ -11,8 +12,7 @@ namespace FlashCardApp
 {
     internal class GetUserInput
     {        
-        StackController stackController = new StackController();
-        CardController cardController = new CardController();
+        private string connectionString = @"Data Source=WILL-PC\NEW2019;Initial Catalog=FlashCardDb;Integrated Security=True";
 
         internal void MainMenu()
         {            
@@ -46,16 +46,16 @@ namespace FlashCardApp
                         Environment.Exit(0);
                         break;
                     case "1":
-                        ManageStacks();
+                        StackMenu();
                         break;
                     case "2":
-                        cardController.ManageCards();
+                        SelectStack();
                         break;
                     //case "2":
-                    //    StudySession();
+                    //    studyController.StudySession();
                     //    break;
                     //case "3":
-                    //    ViewData();
+                    //    displayData.ViewData();
                     //    break;
                     default:
                         Console.WriteLine("\nInvalid Selection. Please type a number from 0 to 3.\nPress Enter...\n");
@@ -66,8 +66,10 @@ namespace FlashCardApp
             }            
         }
 
-        public void ManageStacks()
+        public void StackMenu()
         {
+            StackController stackController = new StackController();
+
             DisplayTable displayTable = new DisplayTable();
             displayTable.DisplayStack();
 
@@ -98,45 +100,133 @@ namespace FlashCardApp
                 case "2":
                     stackController.DeleteStack();
                     break;
-                //case "3":
-                //    UpdateStack();
-                //    break;
+                case "3":
+                    SelectStack();
+                    break;
                 default:
                     Console.WriteLine("\nInvalid Selection. Please type a number from 0 to 3.\nPress Enter...\n");
                     Console.ReadLine();
-                    ManageStacks();
+                    StackMenu();
+                    break;
+            }
+        }        
+
+        public void CardMenu(string stackSelection, int stackSelectionId)
+        {
+            CardController cardController = new CardController();
+            DisplayTable displayTable = new DisplayTable();
+
+            Console.Clear();
+            displayTable.DisplayCardList(stackSelectionId);
+
+            Console.WriteLine($"\nCurrent working stack: {stackSelection}\n");
+
+            Console.WriteLine("0 - Return to Main Menu");
+            Console.WriteLine("1 - Change Current Stack");
+            Console.WriteLine("2 - Create a Flashcard in Current Stack");
+            Console.WriteLine("3 - Edit a Flashcard");
+            Console.WriteLine("4 - Delete a Flashcard");  
+
+            string cardInput = Console.ReadLine();
+
+            while (string.IsNullOrEmpty(cardInput))
+            {
+                Console.WriteLine("\nInvalid Selection. Please type a number from 0 to 3.\n");
+                cardInput = Console.ReadLine();
+            }
+
+            switch (cardInput)
+            {
+                case "0":
+                    MainMenu();
+                    break;
+                case "1":
+                    SelectStack();
+                    break;
+                case "2":
+                    cardController.CreateCard(stackSelection, stackSelectionId);
+                    break;
+                case "3":
+                    cardController.EditCard(stackSelection,stackSelectionId);
+                    break;
+                case "4":
+                    cardController.DeleteCard(stackSelection, stackSelectionId);
+                    break;
+                default:
+                    Console.WriteLine("\nInvalid Selection. Please type a number from 0 to 4.\nPress Enter...\n");
+                    Console.ReadLine();
+                    StackMenu();
                     break;
             }
         }
 
-        
+        public void SelectStack()
+        {
+            GetUserInput getUserInput = new GetUserInput();
+            DisplayTable displayTable = new DisplayTable();
+            displayTable.DisplayStack();
 
+            Console.WriteLine("\nWhich stack would you like to manage? Type 0 to go back to Menu.");
+            string stackSelection = Console.ReadLine();
 
+            if (stackSelection == "0")
+            {
+                getUserInput.MainMenu();
+            }
 
+            SqlConnection sqlConnection = new SqlConnection(connectionString);
+            sqlConnection.Open();
 
+            string insertQuery = $"SELECT * FROM cardstacks;";
+            SqlCommand getStackName = new SqlCommand(insertQuery, sqlConnection);
+            SqlDataReader reader = getStackName.ExecuteReader();
 
+            List<CardStack> stacks = new List<CardStack>();
+            bool cardStackExists = false;
+            int stackSelectionId = 0;
 
-            //GetUserInput getUserInput = new GetUserInput();
-            //DisplayTable displayTable = new DisplayTable();
-            //displayTable.DisplayCardList();
+            while (reader.Read())
+            {
+                CardStack cardStack = new CardStack();
+                cardStack.CardStackName = (string)reader["CardStackName"];
+                cardStack.Id = (int)reader["Id"];
+                stacks.Add(cardStack);
+            }
+            sqlConnection.Close();
 
-            //Console.WriteLine("\nWhich stack would you like to manage? Type 0 to go back to Menu.");
-            //string stackSelection = Console.ReadLine();
+            foreach (var cardStack in stacks)
+            {
+                if (cardStack.CardStackName == stackSelection)
+                {
+                    cardStackExists = true;
+                    stackSelectionId = cardStack.Id;
+                }
+            }
 
-            //while (string.IsNullOrEmpty(stackSelection))
-            //{
-            //    Console.WriteLine("\nInvalid Entry. Please enter the stack name or 0 to go back to Menu.\n");
-            //    stackSelection = Console.ReadLine();
-            //}
+            while (string.IsNullOrEmpty(stackSelection) || cardStackExists == false)
+            {
+                Console.WriteLine("\nInvalid Entry. Stack does not exist.\nPress Enter...\n");
+                stackSelection = Console.ReadLine();
+                SelectStack();
+            }
 
-            //if (stackSelection == "0")
-            //{
-            //    getUserInput.MainMenu();
-            //}
+            try
+            {
+                displayTable.DisplayCardList(stackSelectionId);
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("\nInvalid Entry. Please enter the stack name or 0 to go back to Menu.\n");
+                stackSelection = Console.ReadLine();
 
+                if (stackSelection == "0")
+                {
+                    getUserInput.MainMenu();
+                }
+            }
 
-        
-
+            CardMenu(stackSelection, stackSelectionId);
+        }
 
     }
 }

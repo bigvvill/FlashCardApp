@@ -4,14 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FlashCardApp.Models
+namespace FlashCardApp.Dtos.CardDtos
 {
-    internal class CardStack
+    internal class CardListDeleteDto
     {
         public int Id { get; set; }
-
-        public string CardStackName { get; set; }
-
-        public virtual Card Cards { get; set; }
     }
 }

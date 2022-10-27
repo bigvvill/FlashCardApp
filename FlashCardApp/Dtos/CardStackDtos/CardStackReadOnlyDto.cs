@@ -8,6 +8,6 @@ namespace FlashCardApp.Dtos.CardStack
 {
     internal class CardStackReadOnlyDto
     {
-        public string CardStackName { get; set; }
+        public string Name { get; set; }
     }
 }

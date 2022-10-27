@@ -1,4 +1,5 @@
-﻿using FlashCardApp.Dtos.CardStack;
+﻿using FlashCardApp.Dtos.CardDtos;
+using FlashCardApp.Dtos.CardStack;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -33,7 +34,7 @@ namespace FlashCardApp
                                     tableData.Add(
                                     new CardStackReadOnlyDto
                                     {
-                                        CardStackName = stackReader.GetString(1)
+                                        Name = stackReader.GetString(1)
                                     });
                                 }
                             }
@@ -78,9 +79,9 @@ namespace FlashCardApp
                                     tableData.Add(
                                     new CardListReadOnlyDto
                                     {
-                                        CardLabelNumber = listNumber,
-                                        CardFront = stackReader.GetString(1),
-                                        CardBack = stackReader.GetString(2)
+                                        Id = listNumber,
+                                        Front = stackReader.GetString(1),
+                                        Back = stackReader.GetString(2)
                                     });
 
                                     listNumber++;
@@ -94,7 +95,7 @@ namespace FlashCardApp
                     }
 
                     Console.Clear();
-                    FormatTable.ShowStackTable(tableData);
+                    FormatTable.ShowCardTable(tableData);
                 }
             }
             catch (Exception e)
