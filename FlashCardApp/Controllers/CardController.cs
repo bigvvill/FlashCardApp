@@ -20,8 +20,7 @@ namespace FlashCardApp.Controllers
 
             Console.Clear();
             displayTable.DisplayCardList(currentStackId);
-
-            //Console.WriteLine($"{currentStack} - {currentStackId}");
+            
             Console.WriteLine($"\nCreate new Flashcard in the {currentStack} stack\n");
             Console.WriteLine("Enter question text for front of the card or 0 to go back to Menu");
             string frontText = Console.ReadLine();
