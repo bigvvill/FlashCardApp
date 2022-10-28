@@ -10,6 +10,12 @@ namespace FlashCardApp.Controllers
     {
         public void StudySession()
         {
+            GetUserInput getUserInput = new GetUserInput();
+            getUserInput.SelectStack("study");
+        }
+
+        public void StudyCards(string stackSelection, int stackSelectionId)
+        {
 
         }
     }

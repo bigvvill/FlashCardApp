@@ -52,7 +52,7 @@ namespace FlashCardApp
                         StackMenu();
                         break;
                     case "2":
-                        SelectStack();
+                        SelectStack("manage");
                         break;
                     case "3":
                         studyController.StudySession(); // TODO : Create Study Session
@@ -104,7 +104,7 @@ namespace FlashCardApp
                     stackController.DeleteStack();
                     break;
                 case "3":
-                    SelectStack();
+                    SelectStack("manage");
                     break;
                 default:
                     Console.WriteLine("\nInvalid Selection. Please type a number from 0 to 3.\nPress Enter...\n");
@@ -144,7 +144,7 @@ namespace FlashCardApp
                     MainMenu();
                     break;
                 case "1":
-                    SelectStack();
+                    SelectStack("manage");
                     break;
                 case "2":
                     cardController.CreateCard(stackSelection, stackSelectionId);
@@ -163,14 +163,23 @@ namespace FlashCardApp
             }
         }
 
-        public void SelectStack()
+        public void SelectStack(string context)
         {
             GetUserInput getUserInput = new GetUserInput();
             DisplayTable displayTable = new DisplayTable();
             displayTable.DisplayStack();
+            string stackSelection;
 
-            Console.WriteLine("\nWhich stack would you like to manage? Type 0 to go back to Menu.");
-            string stackSelection = Console.ReadLine();
+            if (context == "manage")
+            {
+                Console.WriteLine("\nWhich stack would you like to manage? Type 0 to go back to Menu.");
+                stackSelection = Console.ReadLine();
+            }
+            else
+            {
+                Console.WriteLine("\nWhich stack would you like to study? Type 0 to go back to Menu.");
+                stackSelection = Console.ReadLine();
+            }            
 
             if (stackSelection == "0")
             {
@@ -206,12 +215,25 @@ namespace FlashCardApp
                 }
             }
 
-            while (string.IsNullOrEmpty(stackSelection) || cardStackExists == false)
+            if (context == "manage")
             {
-                Console.WriteLine("\nInvalid Entry. Stack does not exist.\nPress Enter...\n");
-                stackSelection = Console.ReadLine();
-                SelectStack();
+                while (string.IsNullOrEmpty(stackSelection) || cardStackExists == false)
+                {
+                    Console.WriteLine("\nInvalid Entry. Stack does not exist.\nPress Enter...\n");
+                    stackSelection = Console.ReadLine();
+                    SelectStack("manage");
+                }
             }
+
+            else
+            {
+                while (string.IsNullOrEmpty(stackSelection) || cardStackExists == false)
+                {
+                    Console.WriteLine("\nInvalid Entry. Stack does not exist.\nPress Enter...\n");
+                    stackSelection = Console.ReadLine();
+                    SelectStack("study");
+                }
+            }            
 
             try
             {
@@ -228,7 +250,17 @@ namespace FlashCardApp
                 }
             }
 
-            CardMenu(stackSelection, stackSelectionId);
+            if (context == "manage")
+            {
+                CardMenu(stackSelection, stackSelectionId);
+            }
+
+            else
+            {
+                StudyController studyController = new StudyController();
+                studyController.StudyCards(stackSelection, stackSelectionId);
+            }
+            
         }
 
     }
