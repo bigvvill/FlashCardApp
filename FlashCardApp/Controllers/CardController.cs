@@ -40,7 +40,6 @@ namespace FlashCardApp.Controllers
             getUserInput.CardMenu(currentStack, currentStackId);
         }
 
-        //TODO : EDIT CARD FUNCTION
         public void EditCard(string currentStack, int currentStackId)
         {
             GetUserInput getUserInput = new GetUserInput();
