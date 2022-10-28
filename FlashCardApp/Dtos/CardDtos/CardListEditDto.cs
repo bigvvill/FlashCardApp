@@ -6,15 +6,12 @@ using System.Threading.Tasks;
 
 namespace FlashCardApp.Dtos.CardDtos
 {
-    internal class CardListReadOnlyDto
+    internal class CardListEditDto
     {
-        
         public int Id { get; set; }
 
-        
-        public string Front { get; set; }
+        public string CardFront { get; set; }
 
-        
-        public string Back { get; set; }
+        public string CardBack { get; set; }
     }
 }

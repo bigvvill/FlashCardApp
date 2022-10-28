@@ -50,10 +50,100 @@ namespace FlashCardApp.Controllers
             Console.Clear();
             displayTable.DisplayCardList(currentStackId);
 
-            Console.WriteLine("Choose a card Id to edit:");
-            string cardId = Console.ReadLine();
+            Console.WriteLine("Choose a card Id to edit or 0 to return to Menu");
+            string cardToEdit = Console.ReadLine();
 
+            bool isNumber = Int32.TryParse(cardToEdit, out int cardId);
 
+            while (string.IsNullOrEmpty(cardToEdit) || !isNumber)
+            {
+                Console.WriteLine("\nInvalid Selection. Please type a Card Id or 0 to return to Menu\n");
+                cardToEdit = Console.ReadLine();
+                isNumber = Int32.TryParse(cardToEdit, out cardId);
+            }
+
+            if (cardToEdit == "0")
+            {
+                getUserInput.CardMenu(currentStack, currentStackId);
+            }
+
+            try
+            {
+                List<CardListEditDto> cardList = new List<CardListEditDto>();
+                using (var connection = new SqlConnection(connectionString))
+                {
+                    using (var tableCmd = connection.CreateCommand())
+                    {
+                        connection.Open();
+                        tableCmd.CommandText = $"SELECT * FROM cards WHERE stackid = {currentStackId};";
+
+                        using (var cardReader = tableCmd.ExecuteReader())
+                        {
+                            if (cardReader.HasRows)
+                            {
+                                while (cardReader.Read())
+                                {
+                                    cardList.Add(
+                                    new CardListEditDto
+                                    {
+                                        Id = cardReader.GetInt32(0),
+                                        CardFront = cardReader.GetString(1),
+                                        CardBack = cardReader.GetString(2)
+                                    });
+                                }
+                            }
+
+                            else
+                            {
+                                Console.WriteLine("\nNo rows found.\n");
+                                Console.ReadLine();
+                            }
+                        }
+                    }
+
+                    Console.WriteLine("Enter question text for front of the card or Enter to leave as is");
+                    Console.WriteLine($"Current Text: {cardList[cardId-1].CardFront}");
+                    string frontText = Console.ReadLine();
+                    Console.WriteLine("Enter answer text for the back of the card or Enter to leave as is");
+                    Console.WriteLine($"Current Text: {cardList[cardId - 1].CardBack}");
+                    string backText = Console.ReadLine();
+
+                    if (string.IsNullOrEmpty(frontText) && string.IsNullOrEmpty(backText))
+                    {
+                        EditCard(currentStack, currentStackId);
+                    }
+
+                    else if (string.IsNullOrEmpty(frontText) && !string.IsNullOrEmpty(backText))
+                    {
+                        string frontQuery = $"UPDATE cards SET cardback = '{backText}' WHERE Id = {cardList[cardId - 1].Id};";
+                        SqlCommand insertFront = new SqlCommand(frontQuery, connection);
+                        insertFront.ExecuteNonQuery();
+                    }
+
+                    else if (!string.IsNullOrEmpty(frontText) && string.IsNullOrEmpty(backText))
+                    {
+                        string frontQuery = $"UPDATE cards SET cardfront = '{frontText}' WHERE Id = {cardList[cardId - 1].Id};";
+                        SqlCommand insertBack = new SqlCommand(frontQuery, connection);
+                        insertBack.ExecuteNonQuery();
+                    }
+
+                    else 
+                    {
+                        string frontQuery = $"UPDATE cards SET cardfront = '{frontText}', cardback = '{backText}' WHERE Id = {cardList[cardId - 1].Id};";
+                        SqlCommand insertBoth = new SqlCommand(frontQuery, connection);
+                        insertBoth.ExecuteNonQuery();
+                    }
+
+                    Console.WriteLine("Card Updated. Press Enter...");
+                    Console.ReadLine();
+                    EditCard(currentStack, currentStackId);
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                Console.ReadLine();
+            }
         }
 
         public void DeleteCard(string currentStack, int currentStackId)

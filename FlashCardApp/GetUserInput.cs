@@ -54,14 +54,14 @@ namespace FlashCardApp
                     case "2":
                         SelectStack();
                         break;
-                    case "2":
+                    case "3":
                         studyController.StudySession(); // TODO : Create Study Session
                         break;
-                    case "3":
+                    case "4":
                         displayTable.DisplayData();  // TODO : Create Display Data
                         break;
                     default:
-                        Console.WriteLine("\nInvalid Selection. Please type a number from 0 to 3.\nPress Enter...\n");
+                        Console.WriteLine("\nInvalid Selection. Please type a number from 0 to 4.\nPress Enter...\n");
                         Console.ReadLine();
                         MainMenu();
                         break;
