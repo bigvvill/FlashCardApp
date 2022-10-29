@@ -163,6 +163,49 @@ namespace FlashCardApp
             }
         }
 
+        public void StudyMenu(string stackSelection, int stackSelectionId)
+        {
+            StudyController studyController = new StudyController();
+            DisplayTable displayTable = new DisplayTable();
+
+            Console.Clear();
+            Console.WriteLine($"Current study stack: {stackSelection}\n");
+
+            Console.WriteLine("0 - Back To Main Menu");
+            Console.WriteLine("1 - Study using Front of card");
+            Console.WriteLine("2 - Study using Back of card");
+            Console.WriteLine("3 - View Study Session Data");
+
+            string studyInput = Console.ReadLine();
+
+            while (string.IsNullOrEmpty(studyInput))
+            {
+                Console.WriteLine("\nInvalid Selection. Please type a number from 0 to 3.\n");
+                studyInput = Console.ReadLine();
+            }
+
+            switch (studyInput)
+            {
+                case "0":
+                    MainMenu();
+                    break;
+                case "1":
+                    studyController.StudyFront(stackSelection, stackSelectionId);
+                    break;
+                case "2":
+                    studyController.StudyBack(stackSelection, stackSelectionId);
+                    break;
+                case "3":
+                    displayTable.DisplayData();
+                    break;                
+                default:
+                    Console.WriteLine("\nInvalid Selection. Please type a number from 0 to 4.\nPress Enter...\n");
+                    Console.ReadLine();
+                    StackMenu();
+                    break;
+            }
+        }
+
         public void SelectStack(string context)
         {
             GetUserInput getUserInput = new GetUserInput();

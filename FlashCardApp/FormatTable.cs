@@ -24,5 +24,21 @@ namespace FlashCardApp
                 .WithTitle("Cards")
                 .ExportAndWriteLine();
         }
+
+        internal static void ShowFrontCard<T>(List<T> tableData) where T : class
+        {
+            ConsoleTableBuilder
+                .From(tableData)
+                .WithTitle("Cards")
+                .ExportAndWriteLine();
+        }
+
+        internal static void ShowBackCard<T>(List<T> tableData) where T : class
+        {
+            ConsoleTableBuilder
+                .From(tableData)
+                .WithTitle("Cards")
+                .ExportAndWriteLine();
+        }
     }
 }
