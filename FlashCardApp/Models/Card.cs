@@ -14,8 +14,6 @@ namespace FlashCardApp.Models
 
         public string CardBack { get; set; }
 
-        public int CardStackId { get; set; }
-
-        public virtual List<CardStack> CardStacks { get; set; }
+        public int CardStackId { get; set; }        
     }
 }

@@ -8,6 +8,6 @@ namespace FlashCardApp.Dtos.StudyCardDtos
 {
     internal class CardBackDto // TODO : Determine data for front
     {
-
+        public string Back { get; set; }
     }
 }

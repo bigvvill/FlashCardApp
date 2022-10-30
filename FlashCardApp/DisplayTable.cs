@@ -1,5 +1,7 @@
-﻿using FlashCardApp.Dtos.CardDtos;
+﻿using FlashCardApp.Controllers;
+using FlashCardApp.Dtos.CardDtos;
 using FlashCardApp.Dtos.CardStack;
+using FlashCardApp.Dtos.StudyCardDtos;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -104,97 +106,36 @@ namespace FlashCardApp
             }
         }
 
-        internal void DisplayFrontCard(int selection)
+        internal void DisplayFrontCard(string stackSelection, string cardFront, string cardBack, int stackSelectionId)
         {
-            try
-            {
-                List<CardListReadOnlyDto> tableData = new List<CardListReadOnlyDto>(); // TODO : Complete diplaying card front
-                using (var connection = new SqlConnection(connectionString))
-                {
-                    using (var tableCmd = connection.CreateCommand())
-                    {
-                        connection.Open();
-                        tableCmd.CommandText = $"SELECT * FROM cards WHERE stackId = {selection};";
+            StudyController studyController = new StudyController();
 
-                        using (var stackReader = tableCmd.ExecuteReader())
-                        {
-                            if (stackReader.HasRows)
-                            {
-                                while (stackReader.Read())
-                                {
+            List<CardFrontDto> tableData = new List<CardFrontDto>(); // TODO : Complete diplaying card front                
 
-                                    tableData.Add(
-                                    new CardListReadOnlyDto
-                                    {                                        
-                                        Front = stackReader.GetString(1),                                        
-                                    });
-                                    
-                                }
-                            }
-                            else
-                            {
-                                Console.WriteLine("\nNo rows found.\n");
-                            }
-                        }
-                    }
-
-                    Console.Clear();
-                    FormatTable.ShowCardTable(tableData);
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-            }
+            tableData.Add(
+            new CardFrontDto
+            {                                        
+                Front = cardFront                                        
+            });      
+                
+            FormatTable.ShowFrontCard(stackSelection, tableData);
+            studyController.GetUserInput("front", stackSelection, cardFront, cardBack, stackSelectionId);            
         }
 
-        internal void DisplayBackCard(int selection)
+        internal void DisplayBackCard(string stackSelection, string cardFront, string cardBack, int stackSelectionId)
         {
-            try
+            StudyController studyController = new StudyController();
+
+            List<CardFrontDto> tableData = new List<CardFrontDto>(); // TODO : Complete diplaying card front                
+
+            tableData.Add(
+            new CardFrontDto
             {
-                List<CardListReadOnlyDto> tableData = new List<CardListReadOnlyDto>(); // TODO : Complete diplaying card back
-                using (var connection = new SqlConnection(connectionString))
-                {
-                    using (var tableCmd = connection.CreateCommand())
-                    {
-                        connection.Open();
-                        tableCmd.CommandText = $"SELECT * FROM cards WHERE stackId = {selection};";
+                Front = cardBack
+            });
 
-                        using (var stackReader = tableCmd.ExecuteReader())
-                        {
-                            int listNumber = 1;
-
-                            if (stackReader.HasRows)
-                            {
-                                while (stackReader.Read())
-                                {
-
-                                    tableData.Add(
-                                    new CardListReadOnlyDto
-                                    {
-                                        Id = listNumber,
-                                        Front = stackReader.GetString(1),
-                                        Back = stackReader.GetString(2)
-                                    });
-
-                                    listNumber++;
-                                }
-                            }
-                            else
-                            {
-                                Console.WriteLine("\nNo rows found.\n");
-                            }
-                        }
-                    }
-
-                    Console.Clear();
-                    FormatTable.ShowCardTable(tableData);
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-            }
+            FormatTable.ShowFrontCard(stackSelection, tableData);
+            studyController.GetUserInput("back", stackSelection, cardFront, cardBack, stackSelectionId);
         }
 
         internal void DisplayData()

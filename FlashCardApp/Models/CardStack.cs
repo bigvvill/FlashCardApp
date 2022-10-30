@@ -11,7 +11,6 @@ namespace FlashCardApp.Models
         public int Id { get; set; }
 
         public string CardStackName { get; set; }
-
-        public virtual Card Cards { get; set; }
+                
     }
 }

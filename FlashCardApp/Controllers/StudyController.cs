@@ -1,6 +1,11 @@
-﻿using System;
+﻿using FlashCardApp.Dtos.CardDtos;
+using FlashCardApp.Dtos.StudyCardDtos;
+using FlashCardApp.Models;
+using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -8,6 +13,8 @@ namespace FlashCardApp.Controllers
 {
     internal class StudyController
     {
+        private string connectionString = @"Data Source=WILL-PC\NEW2019;Initial Catalog=FlashCardDb;Integrated Security=True";
+
         public void StudySession()
         {
             GetUserInput getUserInput = new GetUserInput();
@@ -23,13 +30,203 @@ namespace FlashCardApp.Controllers
         public void StudyFront(string stackSelection, int stackSelectionId) // TODO : Create StudyFront
         {
             DisplayTable displayTable = new DisplayTable();
-            displayTable.DisplayFrontCard(stackSelectionId); // TODO : Get data to randomize card
+
+            List<Card> cards = new List<Card>();
+
+            using (var connection = new SqlConnection(connectionString))
+            {
+                using (var tableCmd = connection.CreateCommand())
+                {
+                    connection.Open();
+                    tableCmd.CommandText = $"SELECT * FROM cards WHERE stackid = {stackSelectionId};";
+
+                    using (var cardReader = tableCmd.ExecuteReader())
+                    {
+                        if (cardReader.HasRows)
+                        {
+                            while (cardReader.Read())
+                            {
+                                cards.Add(
+                                new Card
+                                {
+                                    Id = cardReader.GetInt32(0),
+                                    CardFront = cardReader.GetString(1),
+                                    CardBack = cardReader.GetString(2),
+                                    CardStackId = cardReader.GetInt32(3)
+                                });
+                            }
+                        }
+
+                        else
+                        {
+                            Console.WriteLine("\nNo rows found.\n");
+                            Console.ReadLine();
+                        }
+                    }
+                }
+            }
+            Random rnd = new Random();
+            int currentCard = rnd.Next(cards.Count);
+
+            string cardFront = cards[currentCard].CardFront;
+            string cardBack = cards[currentCard].CardBack;
+
+            Console.Clear();
+            displayTable.DisplayFrontCard(stackSelection, cardFront, cardBack, stackSelectionId);
+
+            //Console.WriteLine(cardFront);
+            //Console.ReadLine();
+        
         }
 
         public void StudyBack(string stackSelection, int stackSelectionId) // TODO : Create StudyBack
         {
             DisplayTable displayTable = new DisplayTable();
-            displayTable.DisplayBackCard(stackSelectionId);  // TODO : Get data to randomize card
+
+            List<Card> cards = new List<Card>();
+
+            using (var connection = new SqlConnection(connectionString))
+            {
+                using (var tableCmd = connection.CreateCommand())
+                {
+                    connection.Open();
+                    tableCmd.CommandText = $"SELECT * FROM cards WHERE stackid = {stackSelectionId};";
+
+                    using (var cardReader = tableCmd.ExecuteReader())
+                    {
+                        if (cardReader.HasRows)
+                        {
+                            while (cardReader.Read())
+                            {
+                                cards.Add(
+                                new Card
+                                {
+                                    Id = cardReader.GetInt32(0),
+                                    CardFront = cardReader.GetString(1),
+                                    CardBack = cardReader.GetString(2),
+                                    CardStackId = cardReader.GetInt32(3)
+                                });
+                            }
+                        }
+
+                        else
+                        {
+                            Console.WriteLine("\nNo rows found.\n");
+                            Console.ReadLine();
+                        }
+                    }
+                }
+            }
+            Random rnd = new Random();
+            int currentCard = rnd.Next(cards.Count);
+
+            string cardFront = cards[currentCard].CardFront;
+            string cardBack = cards[currentCard].CardBack;
+
+            Console.Clear();
+            displayTable.DisplayBackCard(stackSelection, cardFront, cardBack, stackSelectionId);
+
+            //Console.WriteLine(cardBack);
+            //Console.ReadLine();
+        }
+
+        public void GetUserInput(string cardSide, string stackSelection, string cardFront, string cardBack, int stackSelectionId)
+        {
+            string playAgain = "";
+
+            Console.WriteLine("Input your answer to this card or 0 to go back to Menu");
+            string cardAnswer = Console.ReadLine();
+
+            while (string.IsNullOrEmpty(cardAnswer))
+            {
+                Console.WriteLine("\nInvalid Entry. Input your answer or 0 to go back to Menu.\n");
+                cardAnswer = Console.ReadLine();
+            }
+
+            if (cardAnswer == "0")
+            {
+                StudyCards(stackSelection, stackSelectionId);
+            }
+
+            if (cardSide == "front")
+            {
+                if (cardAnswer == cardBack)
+                {
+                    Console.WriteLine("Your answer was correct!\nPress Enter to try another card or 0 to go back to Menu...");
+                    playAgain = Console.ReadLine();
+
+                    if (playAgain == "0")
+                    {
+                        StudyCards(stackSelection, stackSelectionId);
+                    }
+
+                    else
+                    {
+                        StudyFront(stackSelection, stackSelectionId);
+                    }
+                }
+
+                else
+                {
+
+
+                    Console.WriteLine("Your answer was wrong.\n");
+                    Console.WriteLine($"You answered {cardAnswer}\n");
+                    Console.WriteLine($"The correct answer was {cardBack}\nPress Enter to try another card or 0 to go back to Menu...");
+                    playAgain = Console.ReadLine();
+
+                    if (playAgain == "0")
+                    {
+                        StudyCards(stackSelection, stackSelectionId);
+                    }
+
+                    else
+                    {
+                        StudyFront(stackSelection, stackSelectionId);
+                    }
+                }              
+            }
+
+            else
+            {
+                if (cardAnswer == cardFront)
+                {
+                    Console.WriteLine("Your answer was correct!\nPress Enter to try another card or 0 to go back to Menu...");
+                    playAgain = Console.ReadLine();
+
+                    if (playAgain == "0")
+                    {
+                        StudyCards(stackSelection, stackSelectionId);
+                    }
+
+                    else
+                    {
+                        StudyBack(stackSelection, stackSelectionId);
+                    }
+                }
+
+                else
+                {
+
+
+                    Console.WriteLine("Your answer was wrong.\n");
+                    Console.WriteLine($"You answered {cardAnswer}\n");
+                    Console.WriteLine($"The correct answer was {cardFront}\nPress Enter to try another card or 0 to go back to Menu...");
+                    playAgain = Console.ReadLine();
+
+
+                    if (playAgain == "0")
+                    {
+                        StudyCards(stackSelection, stackSelectionId);
+                    }
+
+                    else
+                    {
+                        StudyBack(stackSelection, stackSelectionId);
+                    }
+
+                }
+            }
         }
     }
 }
