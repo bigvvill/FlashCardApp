@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace FlashCardApp.Dtos.StudyCardDtos
 {
-    internal class CardBackDto // TODO : Determine data for front
+    internal class CardBackDto 
     {
         public string Back { get; set; }
     }

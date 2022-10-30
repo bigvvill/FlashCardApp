@@ -27,7 +27,7 @@ namespace FlashCardApp.Controllers
             getUserInput.StudyMenu(stackSelection, stackSelectionId);
         }
 
-        public void StudyFront(string stackSelection, int stackSelectionId) // TODO : Create StudyFront
+        public void StudyFront(string stackSelection, int stackSelectionId) 
         {
             DisplayTable displayTable = new DisplayTable();
 
@@ -72,14 +72,10 @@ namespace FlashCardApp.Controllers
             string cardBack = cards[currentCard].CardBack;
 
             Console.Clear();
-            displayTable.DisplayFrontCard(stackSelection, cardFront, cardBack, stackSelectionId);
-
-            //Console.WriteLine(cardFront);
-            //Console.ReadLine();
-        
+            displayTable.DisplayFrontCard(stackSelection, cardFront, cardBack, stackSelectionId);        
         }
 
-        public void StudyBack(string stackSelection, int stackSelectionId) // TODO : Create StudyBack
+        public void StudyBack(string stackSelection, int stackSelectionId) 
         {
             DisplayTable displayTable = new DisplayTable();
 
@@ -125,9 +121,6 @@ namespace FlashCardApp.Controllers
 
             Console.Clear();
             displayTable.DisplayBackCard(stackSelection, cardFront, cardBack, stackSelectionId);
-
-            //Console.WriteLine(cardBack);
-            //Console.ReadLine();
         }
 
         public void GetUserInput(string cardSide, string stackSelection, string cardFront, string cardBack, int stackSelectionId)
@@ -152,6 +145,8 @@ namespace FlashCardApp.Controllers
             {
                 if (cardAnswer == cardBack)
                 {
+                    // TODO : Save session data
+
                     Console.WriteLine("Your answer was correct!\nPress Enter to try another card or 0 to go back to Menu...");
                     playAgain = Console.ReadLine();
 
@@ -168,7 +163,7 @@ namespace FlashCardApp.Controllers
 
                 else
                 {
-
+                    // TODO : Save session data
 
                     Console.WriteLine("Your answer was wrong.\n");
                     Console.WriteLine($"You answered {cardAnswer}\n");
@@ -191,6 +186,9 @@ namespace FlashCardApp.Controllers
             {
                 if (cardAnswer == cardFront)
                 {
+
+                    // TODO : Save session data
+
                     Console.WriteLine("Your answer was correct!\nPress Enter to try another card or 0 to go back to Menu...");
                     playAgain = Console.ReadLine();
 
@@ -207,7 +205,7 @@ namespace FlashCardApp.Controllers
 
                 else
                 {
-
+                    // TODO : Save session data
 
                     Console.WriteLine("Your answer was wrong.\n");
                     Console.WriteLine($"You answered {cardAnswer}\n");

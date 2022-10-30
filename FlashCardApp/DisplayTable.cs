@@ -110,7 +110,7 @@ namespace FlashCardApp
         {
             StudyController studyController = new StudyController();
 
-            List<CardFrontDto> tableData = new List<CardFrontDto>(); // TODO : Complete diplaying card front                
+            List<CardFrontDto> tableData = new List<CardFrontDto>();         
 
             tableData.Add(
             new CardFrontDto
@@ -126,7 +126,7 @@ namespace FlashCardApp
         {
             StudyController studyController = new StudyController();
 
-            List<CardFrontDto> tableData = new List<CardFrontDto>(); // TODO : Complete diplaying card front                
+            List<CardFrontDto> tableData = new List<CardFrontDto>();            
 
             tableData.Add(
             new CardFrontDto

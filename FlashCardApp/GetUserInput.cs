@@ -55,7 +55,7 @@ namespace FlashCardApp
                         SelectStack("manage");
                         break;
                     case "3":
-                        studyController.StudySession(); // TODO : Create Study Session
+                        studyController.StudySession(); 
                         break;
                     case "4":
                         displayTable.DisplayData();  // TODO : Create Display Data
@@ -76,7 +76,6 @@ namespace FlashCardApp
             DisplayTable displayTable = new DisplayTable();
             displayTable.DisplayStack();
 
-            //Console.WriteLine("-------------");
             Console.WriteLine("\n");
 
             Console.WriteLine("0 - Back To Main Menu");
