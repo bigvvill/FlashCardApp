@@ -13,13 +13,7 @@ namespace FlashCardApp.Controllers
 {
     internal class StudyController
     {
-        private string connectionString = @"Data Source=WILL-PC\NEW2019;Initial Catalog=FlashCardDb;Integrated Security=True";
-
-        //public void StudySession()
-        //{
-        //    GetUserInput getUserInput = new GetUserInput();
-        //    getUserInput.SelectStack("study");
-        //}
+        private string connectionString = @"Data Source=WILL-PC\NEW2019;Initial Catalog=FlashCardDb;Integrated Security=True";        
 
         public void StudyCards(string stackSelection, int stackSelectionId)
         {
@@ -126,10 +120,7 @@ namespace FlashCardApp.Controllers
         public void GetUserInput(string cardSide, string stackSelection, string cardFront, string cardBack, int stackSelectionId, int numberCorrect, int numberTotal)
         {
             string playAgain = "";
-            DateTime sessionTime = DateTime.Now;
-            //int numberCorrect = 0;
-            //int numberTotal = 0;
-
+            DateTime sessionTime = DateTime.Now;   
 
             Console.WriteLine("Input your answer to this card or 0 to go back to Menu");
             string cardAnswer = Console.ReadLine();
@@ -272,7 +263,6 @@ namespace FlashCardApp.Controllers
                     {
                         StudyBack(stackSelection, stackSelectionId, numberCorrect, numberTotal);
                     }
-
                 }
             }
         }

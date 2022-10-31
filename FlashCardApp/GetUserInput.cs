@@ -224,7 +224,7 @@ namespace FlashCardApp
 
             if (stackSelection == "0")
             {
-                getUserInput.MainMenu();
+                MainMenu();
             }
 
             SqlConnection sqlConnection = new SqlConnection(connectionString);
@@ -287,7 +287,7 @@ namespace FlashCardApp
 
                 if (stackSelection == "0")
                 {
-                    getUserInput.MainMenu();
+                    MainMenu();
                 }
             }
 
