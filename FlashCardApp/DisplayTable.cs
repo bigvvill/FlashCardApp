@@ -106,7 +106,7 @@ namespace FlashCardApp
             }
         }
 
-        internal void DisplayFrontCard(string stackSelection, string cardFront, string cardBack, int stackSelectionId)
+        internal void DisplayFrontCard(string stackSelection, string cardFront, string cardBack, int stackSelectionId, int numberCorrect, int numberTotal)
         {
             StudyController studyController = new StudyController();
 
@@ -119,10 +119,10 @@ namespace FlashCardApp
             });      
                 
             FormatTable.ShowFrontCard(stackSelection, tableData);
-            studyController.GetUserInput("front", stackSelection, cardFront, cardBack, stackSelectionId);            
+            studyController.GetUserInput("front", stackSelection, cardFront, cardBack, stackSelectionId, numberCorrect, numberTotal);            
         }
 
-        internal void DisplayBackCard(string stackSelection, string cardFront, string cardBack, int stackSelectionId)
+        internal void DisplayBackCard(string stackSelection, string cardFront, string cardBack, int stackSelectionId, int numberCorrect, int numberTotal)
         {
             StudyController studyController = new StudyController();
 
@@ -135,7 +135,7 @@ namespace FlashCardApp
             });
 
             FormatTable.ShowFrontCard(stackSelection, tableData);
-            studyController.GetUserInput("back", stackSelection, cardFront, cardBack, stackSelectionId);
+            studyController.GetUserInput("back", stackSelection, cardFront, cardBack, stackSelectionId, numberCorrect, numberTotal);
         }
 
         internal void DisplayData()

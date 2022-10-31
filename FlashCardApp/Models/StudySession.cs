@@ -12,6 +12,6 @@ namespace FlashCardApp.Models
         public DateTime SessionDate { get; set; }
         public int CardsTried { get; set; }
         public int CardsCorrect { get; set; }
-        public int StackId { get; set; }
+        public int Stack { get; set; }
     }
 }

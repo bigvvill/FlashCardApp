@@ -55,7 +55,7 @@ namespace FlashCardApp
                         SelectStack("manage");
                         break;
                     case "3":
-                        studyController.StudySession(); 
+                        SelectStack("study");
                         break;
                     case "4":
                         displayTable.DisplayData();  // TODO : Create Display Data
@@ -166,8 +166,7 @@ namespace FlashCardApp
         {
             StudyController studyController = new StudyController();
             DisplayTable displayTable = new DisplayTable();
-
-            Console.Clear();
+           
             Console.WriteLine($"Current study stack: {stackSelection}\n");
 
             Console.WriteLine("0 - Back To Main Menu");
@@ -189,10 +188,10 @@ namespace FlashCardApp
                     MainMenu();
                     break;
                 case "1":
-                    studyController.StudyFront(stackSelection, stackSelectionId);
+                    studyController.StudyFront(stackSelection, stackSelectionId, 0, 0);
                     break;
                 case "2":
-                    studyController.StudyBack(stackSelection, stackSelectionId);
+                    studyController.StudyBack(stackSelection, stackSelectionId, 0, 0);
                     break;
                 case "3":
                     displayTable.DisplayData();
@@ -299,8 +298,7 @@ namespace FlashCardApp
 
             else
             {
-                StudyController studyController = new StudyController();
-                studyController.StudyCards(stackSelection, stackSelectionId);
+                StudyMenu(stackSelection, stackSelectionId);
             }
             
         }
