@@ -57,7 +57,7 @@ namespace FlashCardApp
             }
         }
 
-        internal void DisplayCardList(int selection)
+        internal void DisplayCardList(int currentStackId)
         {
             try
             {
@@ -67,7 +67,7 @@ namespace FlashCardApp
                     using (var tableCmd = connection.CreateCommand())
                     {
                         connection.Open();
-                        tableCmd.CommandText = $"SELECT * FROM cards WHERE stackId = {selection};";
+                        tableCmd.CommandText = $"SELECT * FROM cards WHERE stackId = {currentStackId};";
 
                         using (var stackReader = tableCmd.ExecuteReader())
                         {
@@ -138,9 +138,53 @@ namespace FlashCardApp
             studyController.GetUserInput("back", stackSelection, cardFront, cardBack, stackSelectionId, numberCorrect, numberTotal);
         }
 
-        internal void DisplayData()
+        internal void DisplayData(string stackSelection, int currentStackId) // TODO : Fix this
         {
+            try
+            {
+                List<CardListReadOnlyDto> tableData = new List<CardListReadOnlyDto>();
+                using (var connection = new SqlConnection(connectionString))
+                {
+                    using (var tableCmd = connection.CreateCommand())
+                    {
+                        connection.Open();
+                        tableCmd.CommandText = $"SELECT stack, SUM(numbercorrect) as correct, SUM(numbertotal) as total FROM sessions WHERE stack = {currentStackId} GROUP BY stack;";
 
+                        using (var stackReader = tableCmd.ExecuteReader())
+                        {
+                            int listNumber = 1;
+
+                            if (stackReader.HasRows)
+                            {
+                                while (stackReader.Read())
+                                {
+
+                                    tableData.Add(
+                                    new CardListReadOnlyDto
+                                    {
+                                        Id = listNumber,
+                                        Front = stackReader.GetString(1),
+                                        Back = stackReader.GetString(2)
+                                    });
+
+                                    listNumber++;
+                                }
+                            }
+                            else
+                            {
+                                Console.WriteLine("\nNo rows found.\n");
+                            }
+                        }
+                    }
+
+                    Console.Clear();
+                    FormatTable.ShowCardTable(tableData);
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
         }
     }
 }

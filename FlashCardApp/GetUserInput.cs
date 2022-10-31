@@ -16,8 +16,7 @@ namespace FlashCardApp
 
         internal void MainMenu()
         {
-            DisplayTable displayTable = new DisplayTable();
-            StudyController studyController = new StudyController();
+            DisplayTable displayTable = new DisplayTable();            
 
             bool closeApp = false;
             while (!closeApp)
@@ -58,7 +57,7 @@ namespace FlashCardApp
                         SelectStack("study");
                         break;
                     case "4":
-                        displayTable.DisplayData();  // TODO : Create Display Data
+                        SelectStack("display");  // TODO : Create Display Data
                         break;
                     default:
                         Console.WriteLine("\nInvalid Selection. Please type a number from 0 to 4.\nPress Enter...\n");
@@ -194,7 +193,7 @@ namespace FlashCardApp
                     studyController.StudyBack(stackSelection, stackSelectionId, 0, 0);
                     break;
                 case "3":
-                    displayTable.DisplayData();
+                    displayTable.DisplayData(stackSelection, stackSelectionId);
                     break;                
                 default:
                     Console.WriteLine("\nInvalid Selection. Please type a number from 0 to 4.\nPress Enter...\n");
@@ -216,11 +215,19 @@ namespace FlashCardApp
                 Console.WriteLine("\nWhich stack would you like to manage? Type 0 to go back to Menu.");
                 stackSelection = Console.ReadLine();
             }
+
+            else if (context == "display")
+            {
+                Console.WriteLine("\nWhich stack data would you like to view? Type 0 to go back to Menu.");
+                stackSelection = Console.ReadLine();
+            }
+
             else
             {
                 Console.WriteLine("\nWhich stack would you like to study? Type 0 to go back to Menu.");
                 stackSelection = Console.ReadLine();
-            }            
+            }
+            
 
             if (stackSelection == "0")
             {
@@ -266,6 +273,14 @@ namespace FlashCardApp
                 }
             }
 
+            else if (context == "display")
+            {
+                Console.WriteLine("\nInvalid Entry. Stack does not exist.\nPress Enter...\n");
+                stackSelection = Console.ReadLine();
+                SelectStack("manage");
+
+            }
+
             else
             {
                 while (string.IsNullOrEmpty(stackSelection) || cardStackExists == false)
@@ -294,6 +309,11 @@ namespace FlashCardApp
             if (context == "manage")
             {
                 CardMenu(stackSelection, stackSelectionId);
+            }
+
+            else if (context == "display")
+            {
+                displayTable.DisplayData(stackSelection, stackSelectionId);
             }
 
             else
