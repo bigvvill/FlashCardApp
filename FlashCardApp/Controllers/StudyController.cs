@@ -149,18 +149,7 @@ namespace FlashCardApp.Controllers
 
                     if (playAgain == "0")
                     {
-                        SqlConnection sqlConnection = new SqlConnection(connectionString);
-                        sqlConnection.Open();
-
-                        string insertQuery = $"INSERT INTO sessions(sessiontime,numbercorrect,numbertotal, stack) VALUES ('{sessionTime}',{numberCorrect},{numberTotal}, '{stackSelection}');";
-                        SqlCommand insertCard = new SqlCommand(insertQuery, sqlConnection);
-                        insertCard.ExecuteNonQuery();
-                        sqlConnection.Close();
-
-                        Console.WriteLine($"You got {numberCorrect} right out of {numberTotal}. Press Enter...");
-                        Console.ReadLine();
-
-                        StudyCards(stackSelection, stackSelectionId);
+                        SaveSession(sessionTime, numberCorrect, numberTotal, stackSelection, stackSelectionId);                        
                     }
 
                     else
@@ -180,18 +169,7 @@ namespace FlashCardApp.Controllers
 
                     if (playAgain == "0")
                     {
-                        SqlConnection sqlConnection = new SqlConnection(connectionString);
-                        sqlConnection.Open();
-
-                        string insertQuery = $"INSERT INTO sessions(sessiontime,numbercorrect,numbertotal, stack) VALUES ('{sessionTime}',{numberCorrect},{numberTotal}, '{stackSelection}');";
-                        SqlCommand insertCard = new SqlCommand(insertQuery, sqlConnection);
-                        insertCard.ExecuteNonQuery();
-                        sqlConnection.Close();
-
-                        Console.WriteLine($"You got {numberCorrect} right out of {numberTotal}. Press Enter...");
-                        Console.ReadLine();
-
-                        StudyCards(stackSelection, stackSelectionId);                        
+                        SaveSession(sessionTime, numberCorrect, numberTotal, stackSelection, stackSelectionId);
                     }
 
                     else
@@ -213,18 +191,7 @@ namespace FlashCardApp.Controllers
 
                     if (playAgain == "0")
                     {
-                        SqlConnection sqlConnection = new SqlConnection(connectionString);
-                        sqlConnection.Open();
-
-                        string insertQuery = $"INSERT INTO sessions(sessiontime,numbercorrect,numbertotal, stack) VALUES ('{sessionTime}',{numberCorrect},{numberTotal}, '{stackSelection}');";
-                        SqlCommand insertCard = new SqlCommand(insertQuery, sqlConnection);
-                        insertCard.ExecuteNonQuery();
-                        sqlConnection.Close();
-
-                        Console.WriteLine($"You got {numberCorrect} right out of {numberTotal}. Press Enter...");
-                        Console.ReadLine();
-
-                        StudyCards(stackSelection, stackSelectionId);
+                        SaveSession(sessionTime, numberCorrect, numberTotal, stackSelection, stackSelectionId);
                     }
 
                     else
@@ -245,18 +212,7 @@ namespace FlashCardApp.Controllers
 
                     if (playAgain == "0")
                     {
-                        SqlConnection sqlConnection = new SqlConnection(connectionString);
-                        sqlConnection.Open();
-
-                        string insertQuery = $"INSERT INTO sessions(sessiontime,numbercorrect,numbertotal, stack) VALUES ('{sessionTime}',{numberCorrect},{numberTotal}, '{stackSelection}');";
-                        SqlCommand insertCard = new SqlCommand(insertQuery, sqlConnection);
-                        insertCard.ExecuteNonQuery();
-                        sqlConnection.Close();
-
-                        Console.WriteLine($"You got {numberCorrect} right out of {numberTotal}. Press Enter...");
-                        Console.ReadLine();
-
-                        StudyCards(stackSelection, stackSelectionId);
+                        SaveSession(sessionTime, numberCorrect, numberTotal, stackSelection, stackSelectionId);
                     }
 
                     else
@@ -264,6 +220,39 @@ namespace FlashCardApp.Controllers
                         StudyBack(stackSelection, stackSelectionId, numberCorrect, numberTotal);
                     }
                 }
+            }
+        }
+
+        public void SaveSession(DateTime sessionTime, int numberCorrect, int numberTotal, string stackSelection, int stackSelectionId)
+        {
+            string commandText = "INSERT INTO sessions(sessiontime,numbercorrect,numbertotal, stack) VALUES (@sessionTime,@numberCorrect,@numberTotal,@stackSelection);";
+
+            try
+            {
+                using (SqlConnection sqlConnection = new SqlConnection(connectionString))
+                {
+                    sqlConnection.Open();
+
+                    using (SqlCommand command = new SqlCommand(commandText, sqlConnection))
+                    {
+                        command.Parameters.Add(new SqlParameter("sessionTime", sessionTime));
+                        command.Parameters.Add(new SqlParameter("numberCorrect", numberCorrect));
+                        command.Parameters.Add(new SqlParameter("numberTotal", numberTotal));
+                        command.Parameters.Add(new SqlParameter("stackSelection", stackSelection));
+
+                        command.ExecuteNonQuery();
+                    }
+                }
+
+                Console.WriteLine($"You got {numberCorrect} right out of {numberTotal}. Press Enter...");
+                Console.ReadLine();
+
+                StudyCards(stackSelection, stackSelectionId);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                Console.ReadLine();
             }
         }
     }

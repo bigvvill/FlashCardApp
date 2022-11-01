@@ -165,7 +165,10 @@ namespace FlashCardApp
         {
             StudyController studyController = new StudyController();
             DisplayTable displayTable = new DisplayTable();
-           
+
+            Console.Clear();
+            displayTable.DisplayCardList(stackSelectionId);
+
             Console.WriteLine($"Current study stack: {stackSelection}\n");
 
             Console.WriteLine("0 - Back To Main Menu");
@@ -277,7 +280,7 @@ namespace FlashCardApp
             {
                 Console.WriteLine("\nInvalid Entry. Stack does not exist.\nPress Enter...\n");
                 stackSelection = Console.ReadLine();
-                SelectStack("manage");
+                SelectStack("display");
 
             }
 
@@ -289,22 +292,7 @@ namespace FlashCardApp
                     stackSelection = Console.ReadLine();
                     SelectStack("study");
                 }
-            }            
-
-            try
-            {
-                displayTable.DisplayCardList(stackSelectionId);
-            }
-            catch (Exception)
-            {
-                Console.WriteLine("\nInvalid Entry. Please enter the stack name or 0 to go back to Menu.\n");
-                stackSelection = Console.ReadLine();
-
-                if (stackSelection == "0")
-                {
-                    MainMenu();
-                }
-            }
+            }                        
 
             if (context == "manage")
             {
