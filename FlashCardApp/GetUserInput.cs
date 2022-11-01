@@ -240,7 +240,7 @@ namespace FlashCardApp
             SqlConnection sqlConnection = new SqlConnection(connectionString);
             sqlConnection.Open();
 
-            string insertQuery = $"SELECT * FROM cardstacks;";
+            string insertQuery = $"SELECT * FROM cardstacks;"; // TODO : using
             SqlCommand getStackName = new SqlCommand(insertQuery, sqlConnection);
             SqlDataReader reader = getStackName.ExecuteReader();
 

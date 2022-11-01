@@ -32,7 +32,7 @@ namespace FlashCardApp.Controllers
                 using (var tableCmd = connection.CreateCommand())
                 {
                     connection.Open();
-                    tableCmd.CommandText = $"SELECT * FROM cards WHERE stackid = {stackSelectionId};";
+                    tableCmd.CommandText = $"SELECT * FROM cards WHERE stackid = {stackSelectionId};"; // TODO : perameters
 
                     using (var cardReader = tableCmd.ExecuteReader())
                     {
@@ -80,7 +80,7 @@ namespace FlashCardApp.Controllers
                 using (var tableCmd = connection.CreateCommand())
                 {
                     connection.Open();
-                    tableCmd.CommandText = $"SELECT * FROM cards WHERE stackid = {stackSelectionId};";
+                    tableCmd.CommandText = $"SELECT * FROM cards WHERE stackid = {stackSelectionId};"; // TODO : parameters
 
                     using (var cardReader = tableCmd.ExecuteReader())
                     {

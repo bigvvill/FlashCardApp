@@ -30,7 +30,7 @@ namespace FlashCardApp.Controllers
             SqlConnection sqlConnection = new SqlConnection(connectionString);
             sqlConnection.Open();
 
-            string insertQuery = $"INSERT INTO cards(cardfront,cardback,stackid) VALUES ('{frontText}','{backText}',{currentStackId});";
+            string insertQuery = $"INSERT INTO cards(cardfront,cardback,stackid) VALUES ('{frontText}','{backText}',{currentStackId});"; // TODO : parameters
             SqlCommand insertCard = new SqlCommand(insertQuery, sqlConnection);
             insertCard.ExecuteNonQuery();
             sqlConnection.Close();
@@ -73,7 +73,7 @@ namespace FlashCardApp.Controllers
                     using (var tableCmd = connection.CreateCommand())
                     {
                         connection.Open();
-                        tableCmd.CommandText = $"SELECT * FROM cards WHERE stackid = {currentStackId};";
+                        tableCmd.CommandText = $"SELECT * FROM cards WHERE stackid = {currentStackId};"; // TODO : parameters
 
                         using (var cardReader = tableCmd.ExecuteReader())
                         {
@@ -113,21 +113,21 @@ namespace FlashCardApp.Controllers
 
                     else if (string.IsNullOrEmpty(frontText) && !string.IsNullOrEmpty(backText))
                     {
-                        string frontQuery = $"UPDATE cards SET cardback = '{backText}' WHERE Id = {cardList[cardId - 1].Id};";
+                        string frontQuery = $"UPDATE cards SET cardback = '{backText}' WHERE Id = {cardList[cardId - 1].Id};"; // TODO : parameters
                         SqlCommand insertFront = new SqlCommand(frontQuery, connection);
                         insertFront.ExecuteNonQuery();
                     }
 
                     else if (!string.IsNullOrEmpty(frontText) && string.IsNullOrEmpty(backText))
                     {
-                        string frontQuery = $"UPDATE cards SET cardfront = '{frontText}' WHERE Id = {cardList[cardId - 1].Id};";
+                        string frontQuery = $"UPDATE cards SET cardfront = '{frontText}' WHERE Id = {cardList[cardId - 1].Id};"; // TODO : parameters
                         SqlCommand insertBack = new SqlCommand(frontQuery, connection);
                         insertBack.ExecuteNonQuery();
                     }
 
                     else 
                     {
-                        string frontQuery = $"UPDATE cards SET cardfront = '{frontText}', cardback = '{backText}' WHERE Id = {cardList[cardId - 1].Id};";
+                        string frontQuery = $"UPDATE cards SET cardfront = '{frontText}', cardback = '{backText}' WHERE Id = {cardList[cardId - 1].Id};"; // TODO : parameters
                         SqlCommand insertBoth = new SqlCommand(frontQuery, connection);
                         insertBoth.ExecuteNonQuery();
                     }
@@ -177,7 +177,7 @@ namespace FlashCardApp.Controllers
                     using (var tableCmd = connection.CreateCommand())
                     {
                         connection.Open();
-                        tableCmd.CommandText = $"SELECT * FROM cards WHERE stackid = {currentStackId};";
+                        tableCmd.CommandText = $"SELECT * FROM cards WHERE stackid = {currentStackId};"; // TODO : parameters
 
                         using (var cardReader = tableCmd.ExecuteReader())
                         {
@@ -201,7 +201,7 @@ namespace FlashCardApp.Controllers
                         }
                     }
 
-                    string insertQuery = $"DELETE FROM cards WHERE Id = {cardList[cardId - 1].Id};";
+                    string insertQuery = $"DELETE FROM cards WHERE Id = {cardList[cardId - 1].Id};"; // TODO : parameters
                     SqlCommand insertCard = new SqlCommand(insertQuery, connection);
                     insertCard.ExecuteNonQuery();
                     //connection.Close();

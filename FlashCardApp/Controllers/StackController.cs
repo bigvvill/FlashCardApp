@@ -39,7 +39,7 @@ namespace FlashCardApp.Controllers
                 SqlConnection sqlConnection = new SqlConnection(connectionString);
                 sqlConnection.Open();
 
-                string insertQuery = $"INSERT INTO cardstacks(cardstackname) VALUES('{newStackName}')";
+                string insertQuery = $"INSERT INTO cardstacks(cardstackname) VALUES('{newStackName}')"; // TODO : parameters
                 SqlCommand insertStackName = new SqlCommand(insertQuery, sqlConnection);
                 insertStackName.ExecuteNonQuery();
                 sqlConnection.Close();
@@ -89,7 +89,7 @@ namespace FlashCardApp.Controllers
                     SqlConnection sqlConnection = new SqlConnection(connectionString);
                     sqlConnection.Open();
 
-                    string displayStackQuery = $"DELETE FROM cardstacks WHERE cardstackname ='{stackToDelete}' select @@ROWCOUNT;";
+                    string displayStackQuery = $"DELETE FROM cardstacks WHERE cardstackname ='{stackToDelete}' select @@ROWCOUNT;"; // TODO : parameters
                     SqlCommand getStacks = new SqlCommand(displayStackQuery, sqlConnection);
                     int rc = getStacks.ExecuteNonQuery();
                     sqlConnection.Close();

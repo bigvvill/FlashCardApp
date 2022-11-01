@@ -67,7 +67,7 @@ namespace FlashCardApp
                     using (var tableCmd = connection.CreateCommand())
                     {
                         connection.Open();
-                        tableCmd.CommandText = $"SELECT * FROM cards WHERE stackId = {currentStackId};";
+                        tableCmd.CommandText = $"SELECT * FROM cards WHERE stackId = {currentStackId};"; // TODO : parameters
 
                         using (var stackReader = tableCmd.ExecuteReader())
                         {
@@ -148,7 +148,7 @@ namespace FlashCardApp
                     using (var tableCmd = connection.CreateCommand())
                     {
                         connection.Open();
-                        tableCmd.CommandText = $"SELECT stack, SUM(numbercorrect) as correct, SUM(numbertotal) as total FROM sessions WHERE stack = {currentStackId} GROUP BY stack;";
+                        tableCmd.CommandText = $"SELECT stack, SUM(numbercorrect) as correct, SUM(numbertotal) as total FROM sessions WHERE stack = {currentStackId} GROUP BY stack;"; // TODO : parameters
 
                         // SELECT stack, SUM(numbercorrect) as correct, SUM(numbertotal) as total FROM sessions WHERE stack = 'spanish' AND sessiontime >= '10.30.2022 22:57:00' GROUP BY stack;
 
