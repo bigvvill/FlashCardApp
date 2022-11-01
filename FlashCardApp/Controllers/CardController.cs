@@ -27,17 +27,35 @@ namespace FlashCardApp.Controllers
             Console.WriteLine("Enter answer text for the back of the card or 0 to go back to Menu");
             string backText = Console.ReadLine();
 
-            SqlConnection sqlConnection = new SqlConnection(connectionString);
-            sqlConnection.Open();
+            string insertQuery = "INSERT INTO cards(cardfront,cardback,stackid) VALUES (@frontText, @backText}, @currentStackId);"; 
 
-            string insertQuery = $"INSERT INTO cards(cardfront,cardback,stackid) VALUES ('{frontText}','{backText}',{currentStackId});"; // TODO : parameters
-            SqlCommand insertCard = new SqlCommand(insertQuery, sqlConnection);
-            insertCard.ExecuteNonQuery();
-            sqlConnection.Close();
+            try
+            {
+                using (SqlConnection sqlConnection = new SqlConnection(connectionString))
+                {
+                    sqlConnection.Open();
 
-            Console.WriteLine("New card created. Press Enter...");
-            Console.ReadLine();
-            getUserInput.CardMenu(currentStack, currentStackId);
+                    using (SqlCommand insertCard = new SqlCommand(insertQuery, sqlConnection))
+                    {
+                        insertCard.Parameters.Add(new SqlParameter("frontText", frontText));
+                        insertCard.Parameters.Add(new SqlParameter("backText", backText));
+                        insertCard.Parameters.Add(new SqlParameter("currentstackid", currentStackId));
+
+                        insertCard.ExecuteNonQuery();
+                    }
+                }
+
+                Console.WriteLine("New card created. Press Enter...");
+                Console.ReadLine();
+
+                getUserInput.CardMenu(currentStack, currentStackId);
+
+            }
+            catch (Exception e)
+            {
+
+                Console.WriteLine(e.Message);
+            }
         }
 
         public void EditCard(string currentStack, int currentStackId)
@@ -68,6 +86,7 @@ namespace FlashCardApp.Controllers
             try
             {
                 List<CardListEditDto> cardList = new List<CardListEditDto>();
+
                 using (var connection = new SqlConnection(connectionString))
                 {
                     using (var tableCmd = connection.CreateCommand())
@@ -113,27 +132,68 @@ namespace FlashCardApp.Controllers
 
                     else if (string.IsNullOrEmpty(frontText) && !string.IsNullOrEmpty(backText))
                     {
-                        string frontQuery = $"UPDATE cards SET cardback = '{backText}' WHERE Id = {cardList[cardId - 1].Id};"; // TODO : parameters
-                        SqlCommand insertFront = new SqlCommand(frontQuery, connection);
-                        insertFront.ExecuteNonQuery();
+                        string frontQuery = $"UPDATE cards SET cardback = @backtext WHERE Id = @cardlist;"; 
+
+                        try
+                        {
+                            using (SqlCommand insertFront = new SqlCommand(frontQuery, connection))
+                            {
+                                insertFront.Parameters.Add(new SqlParameter("backtext", backText));
+                                insertFront.Parameters.Add(new SqlParameter("cardlist", cardList[cardId - 1].Id));
+
+                                insertFront.ExecuteNonQuery();
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            Console.WriteLine(e.Message);
+                        }
                     }
 
-                    else if (!string.IsNullOrEmpty(frontText) && string.IsNullOrEmpty(backText))
+                    else if (!string.IsNullOrEmpty(frontText) && string.IsNullOrEmpty(frontText))
                     {
-                        string frontQuery = $"UPDATE cards SET cardfront = '{frontText}' WHERE Id = {cardList[cardId - 1].Id};"; // TODO : parameters
-                        SqlCommand insertBack = new SqlCommand(frontQuery, connection);
-                        insertBack.ExecuteNonQuery();
+                        string backQuery = $"UPDATE cards SET cardback = @fronttext WHERE Id = @cardlist;";
+
+                        try
+                        {
+                            using (SqlCommand insertBack = new SqlCommand(backQuery, connection))
+                            {
+                                insertBack.Parameters.Add(new SqlParameter("fronttext", frontText));
+                                insertBack.Parameters.Add(new SqlParameter("cardlist", cardList[cardId - 1].Id));
+
+                                insertBack.ExecuteNonQuery();
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            Console.WriteLine(e.Message);
+                        }
                     }
 
                     else 
                     {
-                        string frontQuery = $"UPDATE cards SET cardfront = '{frontText}', cardback = '{backText}' WHERE Id = {cardList[cardId - 1].Id};"; // TODO : parameters
-                        SqlCommand insertBoth = new SqlCommand(frontQuery, connection);
-                        insertBoth.ExecuteNonQuery();
+                        string bothQuery = $"UPDATE cards SET cardback = @backtext WHERE Id = @cardlist;";
+
+                        try
+                        {
+                            using (SqlCommand insertBoth = new SqlCommand(bothQuery, connection))
+                            {
+                                insertBoth.Parameters.Add(new SqlParameter("backtext", backText));
+                                insertBoth.Parameters.Add(new SqlParameter("cardlist", cardList[cardId - 1].Id));
+
+                                insertBoth.ExecuteNonQuery();
+                            }
+                        }
+                        catch (Exception)
+                        {
+
+                            throw;
+                        }
                     }
 
                     Console.WriteLine("Card Updated. Press Enter...");
                     Console.ReadLine();
+
                     EditCard(currentStack, currentStackId);
                 }
             }
