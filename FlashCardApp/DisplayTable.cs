@@ -150,6 +150,8 @@ namespace FlashCardApp
                         connection.Open();
                         tableCmd.CommandText = $"SELECT stack, SUM(numbercorrect) as correct, SUM(numbertotal) as total FROM sessions WHERE stack = {currentStackId} GROUP BY stack;";
 
+                        // SELECT stack, SUM(numbercorrect) as correct, SUM(numbertotal) as total FROM sessions WHERE stack = 'spanish' AND sessiontime >= '10.30.2022 22:57:00' GROUP BY stack;
+
                         using (var stackReader = tableCmd.ExecuteReader())
                         {
                             int listNumber = 1;
