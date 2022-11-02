@@ -225,7 +225,7 @@ namespace FlashCardApp.Controllers
 
         public void SaveSession(DateTime sessionTime, int numberCorrect, int numberTotal, string stackSelection, int stackSelectionId)
         {
-            string commandText = "INSERT INTO sessions(sessiontime,numbercorrect,numbertotal, stack) VALUES (@sessionTime,@numberCorrect,@numberTotal,@stackSelection);";
+            string commandText = "INSERT INTO sessions(sessiontime,numbercorrect,numbertotal, stack, stacksessionid) VALUES (@sessionTime,@numberCorrect,@numberTotal,@stackSelection,@stackSelectionId);";
 
             try
             {
@@ -239,6 +239,7 @@ namespace FlashCardApp.Controllers
                         command.Parameters.Add(new SqlParameter("@numberCorrect", numberCorrect));
                         command.Parameters.Add(new SqlParameter("@numberTotal", numberTotal));
                         command.Parameters.Add(new SqlParameter("@stackSelection", stackSelection));
+                        command.Parameters.Add(new SqlParameter("@stackSelectionId", stackSelectionId));
 
                         command.ExecuteNonQuery();
                     }
