@@ -14,7 +14,7 @@ namespace FlashCardApp
             ConsoleTableBuilder
                 .From(tableData)
                 .WithTitle("Stacks")
-                .ExportAndWriteLine();            
+                .ExportAndWriteLine();
         }
 
         internal static void ShowCardTable<T>(List<T> tableData) where T : class
@@ -22,6 +22,14 @@ namespace FlashCardApp
             ConsoleTableBuilder
                 .From(tableData)
                 .WithTitle("Cards")
+                .ExportAndWriteLine();
+        }
+
+        internal static void ShowSessionTable<T>(List<T> tableData) where T : class
+        {
+            ConsoleTableBuilder
+                .From(tableData)
+                .WithTitle("Sessions")
                 .ExportAndWriteLine();
         }
 
@@ -40,5 +48,7 @@ namespace FlashCardApp
                 .WithTitle("Cards")
                 .ExportAndWriteLine();
         }
+
+
     }
 }

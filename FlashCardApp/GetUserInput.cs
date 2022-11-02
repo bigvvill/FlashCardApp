@@ -11,12 +11,12 @@ using System.Threading.Tasks;
 namespace FlashCardApp
 {
     internal class GetUserInput
-    {        
+    {
         private string connectionString = @"Data Source=WILL-PC\NEW2019;Initial Catalog=FlashCardDb;Integrated Security=True";
 
         internal void MainMenu()
         {
-            DisplayTable displayTable = new DisplayTable();            
+            DisplayTable displayTable = new DisplayTable();
 
             bool closeApp = false;
             while (!closeApp)
@@ -57,7 +57,8 @@ namespace FlashCardApp
                         SelectStack("study");
                         break;
                     case "4":
-                        SelectStack("display");  // TODO : Create Display Data
+                        displayTable.DisplayData();
+                        //SelectStack("display");  // TODO : Create Display Data
                         break;
                     default:
                         Console.WriteLine("\nInvalid Selection. Please type a number from 0 to 4.\nPress Enter...\n");
@@ -65,7 +66,7 @@ namespace FlashCardApp
                         MainMenu();
                         break;
                 }
-            }            
+            }
         }
 
         public void StackMenu()
@@ -110,7 +111,7 @@ namespace FlashCardApp
                     StackMenu();
                     break;
             }
-        }        
+        }
 
         public void CardMenu(string stackSelection, int stackSelectionId)
         {
@@ -126,7 +127,7 @@ namespace FlashCardApp
             Console.WriteLine("1 - Change Current Stack");
             Console.WriteLine("2 - Create a Flashcard in Current Stack");
             Console.WriteLine("3 - Edit a Flashcard in Current Stack");
-            Console.WriteLine("4 - Delete a Flashcard in Current Stack");  
+            Console.WriteLine("4 - Delete a Flashcard in Current Stack");
 
             string cardInput = Console.ReadLine();
 
@@ -148,7 +149,7 @@ namespace FlashCardApp
                     cardController.CreateCard(stackSelection, stackSelectionId);
                     break;
                 case "3":
-                    cardController.EditCard(stackSelection,stackSelectionId);
+                    cardController.EditCard(stackSelection, stackSelectionId);
                     break;
                 case "4":
                     cardController.DeleteCard(stackSelection, stackSelectionId);
@@ -196,8 +197,9 @@ namespace FlashCardApp
                     studyController.StudyBack(stackSelection, stackSelectionId, 0, 0);
                     break;
                 case "3":
-                    displayTable.DisplayData(stackSelection, stackSelectionId);
-                    break;                
+                    displayTable.DisplayData();
+                    //displayTable.DisplayData(stackSelection, stackSelectionId);
+                    break;
                 default:
                     Console.WriteLine("\nInvalid Selection. Please type a number from 0 to 4.\nPress Enter...\n");
                     Console.ReadLine();
@@ -230,7 +232,7 @@ namespace FlashCardApp
                 Console.WriteLine("\nWhich stack would you like to study? Type 0 to go back to Menu.");
                 stackSelection = Console.ReadLine();
             }
-            
+
 
             if (stackSelection == "0")
             {
@@ -292,7 +294,7 @@ namespace FlashCardApp
                     stackSelection = Console.ReadLine();
                     SelectStack("study");
                 }
-            }                        
+            }
 
             if (context == "manage")
             {
@@ -301,16 +303,15 @@ namespace FlashCardApp
 
             else if (context == "display")
             {
-                displayTable.DisplayData(stackSelection, stackSelectionId);
+                displayTable.DisplayData(/*stackSelection, stackSelectionId*/);
             }
 
             else
             {
                 StudyMenu(stackSelection, stackSelectionId);
             }
-            
+
         }
 
     }
 }
-

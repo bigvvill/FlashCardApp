@@ -13,7 +13,7 @@ namespace FlashCardApp.Controllers
 {
     internal class StudyController
     {
-        private string connectionString = @"Data Source=WILL-PC\NEW2019;Initial Catalog=FlashCardDb;Integrated Security=True";        
+        private string connectionString = @"Data Source=WILL-PC\NEW2019;Initial Catalog=FlashCardDb;Integrated Security=True";
 
         public void StudyCards(string stackSelection, int stackSelectionId)
         {
@@ -21,9 +21,10 @@ namespace FlashCardApp.Controllers
             getUserInput.StudyMenu(stackSelection, stackSelectionId);
         }
 
-        public void StudyFront(string stackSelection, int stackSelectionId, int numberCorrect, int numberTotal) 
+        public void StudyFront(string stackSelection, int stackSelectionId, int numberCorrect, int numberTotal)
         {
             DisplayTable displayTable = new DisplayTable();
+            GetUserInput getUserInput = new GetUserInput();
 
             List<Card> cards = new List<Card>();
 
@@ -32,7 +33,7 @@ namespace FlashCardApp.Controllers
                 using (var tableCmd = connection.CreateCommand())
                 {
                     connection.Open();
-                    tableCmd.CommandText = $"SELECT * FROM cards WHERE stackid = {stackSelectionId};"; // TODO : perameters
+                    tableCmd.CommandText = $"SELECT * FROM cards WHERE stackid = {stackSelectionId};";
 
                     using (var cardReader = tableCmd.ExecuteReader())
                     {
@@ -55,6 +56,8 @@ namespace FlashCardApp.Controllers
                         {
                             Console.WriteLine("\nNo rows found.\n");
                             Console.ReadLine();
+
+                            getUserInput.StudyMenu(stackSelection, stackSelectionId);
                         }
                     }
                 }
@@ -66,12 +69,13 @@ namespace FlashCardApp.Controllers
             string cardBack = cards[currentCard].CardBack;
 
             Console.Clear();
-            displayTable.DisplayFrontCard(stackSelection, cardFront, cardBack, stackSelectionId, numberCorrect, numberTotal);        
+            displayTable.DisplayFrontCard(stackSelection, cardFront, cardBack, stackSelectionId, numberCorrect, numberTotal);
         }
 
-        public void StudyBack(string stackSelection, int stackSelectionId, int numberCorrect, int numberTotal) 
+        public void StudyBack(string stackSelection, int stackSelectionId, int numberCorrect, int numberTotal)
         {
             DisplayTable displayTable = new DisplayTable();
+            GetUserInput getUserInput = new GetUserInput();
 
             List<Card> cards = new List<Card>();
 
@@ -80,7 +84,7 @@ namespace FlashCardApp.Controllers
                 using (var tableCmd = connection.CreateCommand())
                 {
                     connection.Open();
-                    tableCmd.CommandText = $"SELECT * FROM cards WHERE stackid = {stackSelectionId};"; // TODO : parameters
+                    tableCmd.CommandText = $"SELECT * FROM cards WHERE stackid = {stackSelectionId};";
 
                     using (var cardReader = tableCmd.ExecuteReader())
                     {
@@ -103,6 +107,8 @@ namespace FlashCardApp.Controllers
                         {
                             Console.WriteLine("\nNo rows found.\n");
                             Console.ReadLine();
+
+                            getUserInput.StudyMenu(stackSelection, stackSelectionId);
                         }
                     }
                 }
@@ -120,7 +126,7 @@ namespace FlashCardApp.Controllers
         public void GetUserInput(string cardSide, string stackSelection, string cardFront, string cardBack, int stackSelectionId, int numberCorrect, int numberTotal)
         {
             string playAgain = "";
-            DateTime sessionTime = DateTime.Now;   
+            DateTime sessionTime = DateTime.Now;
 
             Console.WriteLine("Input your answer to this card or 0 to go back to Menu");
             string cardAnswer = Console.ReadLine();
@@ -149,7 +155,7 @@ namespace FlashCardApp.Controllers
 
                     if (playAgain == "0")
                     {
-                        SaveSession(sessionTime, numberCorrect, numberTotal, stackSelection, stackSelectionId);                        
+                        SaveSession(sessionTime, numberCorrect, numberTotal, stackSelection, stackSelectionId);
                     }
 
                     else
@@ -176,7 +182,7 @@ namespace FlashCardApp.Controllers
                     {
                         StudyFront(stackSelection, stackSelectionId, numberCorrect, numberTotal);
                     }
-                }              
+                }
             }
 
             else
@@ -201,7 +207,7 @@ namespace FlashCardApp.Controllers
                 }
 
                 else
-                {                    
+                {
                     numberTotal++;
 
                     Console.WriteLine("Your answer was wrong.\n");
@@ -225,7 +231,7 @@ namespace FlashCardApp.Controllers
 
         public void SaveSession(DateTime sessionTime, int numberCorrect, int numberTotal, string stackSelection, int stackSelectionId)
         {
-            string commandText = "INSERT INTO sessions(sessiontime,numbercorrect,numbertotal, stack, stacksessionid) VALUES (@sessionTime,@numberCorrect,@numberTotal,@stackSelection,@stackSelectionId);";
+            string commandText = "INSERT INTO sessions(sessiontime,numbercorrect,numbertotal,stack, sessionstackid) VALUES (@sessionTime,@numberCorrect,@numberTotal,@stackSelection, @stackSelectionId);";
 
             try
             {
@@ -239,7 +245,7 @@ namespace FlashCardApp.Controllers
                         command.Parameters.Add(new SqlParameter("@numberCorrect", numberCorrect));
                         command.Parameters.Add(new SqlParameter("@numberTotal", numberTotal));
                         command.Parameters.Add(new SqlParameter("@stackSelection", stackSelection));
-                        command.Parameters.Add(new SqlParameter("@stackSelectionId", stackSelectionId));
+                        command.Parameters.Add(new SqlParameter("@stackSelectionid", stackSelectionId));
 
                         command.ExecuteNonQuery();
                     }

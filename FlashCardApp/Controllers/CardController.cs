@@ -11,7 +11,7 @@ namespace FlashCardApp.Controllers
 {
     internal class CardController
     {
-        private string connectionString = @"Data Source=WILL-PC\NEW2019;Initial Catalog=FlashCardDb;Integrated Security=True";        
+        private string connectionString = @"Data Source=WILL-PC\NEW2019;Initial Catalog=FlashCardDb;Integrated Security=True";
 
         public void CreateCard(string currentStack, int currentStackId)
         {
@@ -20,14 +20,14 @@ namespace FlashCardApp.Controllers
 
             Console.Clear();
             displayTable.DisplayCardList(currentStackId);
-            
+
             Console.WriteLine($"\nCreate new Flashcard in the {currentStack} stack\n");
             Console.WriteLine("Enter question text for front of the card or 0 to go back to Menu");
             string frontText = Console.ReadLine();
             Console.WriteLine("Enter answer text for the back of the card or 0 to go back to Menu");
             string backText = Console.ReadLine();
 
-            string insertQuery = "INSERT INTO cards(cardfront,cardback,stackid) VALUES (@frontText, @backText}, @currentStackId);"; 
+            string insertQuery = "INSERT INTO cards(cardfront,cardback,stackid) VALUES (@frontText, @backText, @currentStackId);";
 
             try
             {
@@ -92,7 +92,7 @@ namespace FlashCardApp.Controllers
                     using (var tableCmd = connection.CreateCommand())
                     {
                         connection.Open();
-                        tableCmd.CommandText = $"SELECT * FROM cards WHERE stackid = {currentStackId};"; // TODO : parameters
+                        tableCmd.CommandText = $"SELECT * FROM cards WHERE stackid = {currentStackId};";
 
                         using (var cardReader = tableCmd.ExecuteReader())
                         {
@@ -119,8 +119,9 @@ namespace FlashCardApp.Controllers
                     }
 
                     Console.WriteLine("Enter question text for front of the card or Enter to leave as is");
-                    Console.WriteLine($"Current Text: {cardList[cardId-1].CardFront}");
+                    Console.WriteLine($"Current Text: {cardList[cardId - 1].CardFront}");
                     string frontText = Console.ReadLine();
+
                     Console.WriteLine("Enter answer text for the back of the card or Enter to leave as is");
                     Console.WriteLine($"Current Text: {cardList[cardId - 1].CardBack}");
                     string backText = Console.ReadLine();
@@ -132,7 +133,7 @@ namespace FlashCardApp.Controllers
 
                     else if (string.IsNullOrEmpty(frontText) && !string.IsNullOrEmpty(backText))
                     {
-                        string frontQuery = $"UPDATE cards SET cardback = @backtext WHERE Id = @cardlist;"; 
+                        string frontQuery = $"UPDATE cards SET cardback = @backtext WHERE Id = @cardlist;";
 
                         try
                         {
@@ -170,9 +171,9 @@ namespace FlashCardApp.Controllers
                         }
                     }
 
-                    else 
+                    else
                     {
-                        string bothQuery = $"UPDATE cards SET cardback = @backtext WHERE Id = @cardlist;";
+                        string bothQuery = "UPDATE cards SET cardback = @backtext WHERE Id = @cardlist;";
 
                         try
                         {
@@ -237,7 +238,7 @@ namespace FlashCardApp.Controllers
                     using (var tableCmd = connection.CreateCommand())
                     {
                         connection.Open();
-                        tableCmd.CommandText = $"SELECT * FROM cards WHERE stackid = {currentStackId};"; // TODO : parameters
+                        tableCmd.CommandText = $"SELECT * FROM cards WHERE stackid = {currentStackId};";
 
                         using (var cardReader = tableCmd.ExecuteReader())
                         {
@@ -250,24 +251,37 @@ namespace FlashCardApp.Controllers
                                     {
                                         Id = cardReader.GetInt32(0)
                                     });
-                                } 
+                                }
                             }
 
                             else
                             {
                                 Console.WriteLine("\nNo rows found.\n");
                                 Console.ReadLine();
-                            }                            
+                            }
                         }
                     }
 
-                    string insertQuery = $"DELETE FROM cards WHERE Id = {cardList[cardId - 1].Id};"; // TODO : parameters
-                    SqlCommand insertCard = new SqlCommand(insertQuery, connection);
-                    insertCard.ExecuteNonQuery();
-                    //connection.Close();
+                    string deleteQuery = "DELETE FROM cards WHERE Id = @cardid;";
+
+                    try
+                    {
+                        using (SqlCommand deleteCard = new SqlCommand(deleteQuery, connection))
+                        {
+                            deleteCard.Parameters.Add(new SqlParameter("@cardid", cardList[cardId - 1].Id));
+
+                            deleteCard.ExecuteNonQuery();
+                        }
+                    }
+                    catch (Exception e)
+                    {
+
+                        Console.WriteLine(e.Message);
+                    }
 
                     Console.WriteLine("Card Deleted. Press Enter...");
                     Console.ReadLine();
+
                     DeleteCard(currentStack, currentStackId);
                 }
             }
@@ -275,7 +289,7 @@ namespace FlashCardApp.Controllers
             {
                 Console.WriteLine(e.Message);
                 Console.ReadLine();
-            }            
+            }
         }
     }
 }
