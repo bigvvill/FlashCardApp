@@ -57,8 +57,7 @@ namespace FlashCardApp
                         SelectStack("study");
                         break;
                     case "4":
-                        displayTable.DisplayData();
-                        //SelectStack("display");  // TODO : Create Display Data
+                        SelectStack("display");  // TODO : Create Display Data
                         break;
                     default:
                         Console.WriteLine("\nInvalid Selection. Please type a number from 0 to 4.\nPress Enter...\n");
@@ -197,8 +196,7 @@ namespace FlashCardApp
                     studyController.StudyBack(stackSelection, stackSelectionId, 0, 0);
                     break;
                 case "3":
-                    displayTable.DisplayData();
-                    //displayTable.DisplayData(stackSelection, stackSelectionId);
+                    displayTable.DisplayData(stackSelection, stackSelectionId);
                     break;                
                 default:
                     Console.WriteLine("\nInvalid Selection. Please type a number from 0 to 4.\nPress Enter...\n");
@@ -303,7 +301,7 @@ namespace FlashCardApp
 
             else if (context == "display")
             {
-                displayTable.DisplayData(/*stackSelection, stackSelectionId*/);
+                displayTable.DisplayData(stackSelection, stackSelectionId);
             }
 
             else

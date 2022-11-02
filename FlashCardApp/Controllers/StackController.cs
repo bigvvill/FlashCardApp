@@ -34,22 +34,16 @@ namespace FlashCardApp.Controllers
                 getUserInput.StackMenu();
             }
 
-            string insertQuery = "INSERT INTO cardstacks(cardstackname) VALUES(@newstackname)";
-
             try
             {
-                using (SqlConnection sqlConnection = new SqlConnection(connectionString))
-                {
-                    sqlConnection.Open();
+                SqlConnection sqlConnection = new SqlConnection(connectionString);
+                sqlConnection.Open();
 
-                    using (SqlCommand insertStack = new SqlCommand(insertQuery, sqlConnection))
-                    {
-                        insertStack.Parameters.Add(new SqlParameter("@newstackname", newStackName));
+                string insertQuery = $"INSERT INTO cardstacks(cardstackname) VALUES('{newStackName}')"; // TODO : parameters
+                SqlCommand insertStackName = new SqlCommand(insertQuery, sqlConnection);
+                insertStackName.ExecuteNonQuery();
+                sqlConnection.Close();
 
-                        insertStack.ExecuteNonQuery();
-                    }
-                }
-                    
                 Console.WriteLine($"New stack {newStackName} has been created.\nPress Enter...");
                 Console.ReadLine();
 
@@ -84,42 +78,34 @@ namespace FlashCardApp.Controllers
             {
                 getUserInput.StackMenu();
             }
-            Console.WriteLine("WARNING! This will delete all associated cards and study sessions!");
+            Console.WriteLine("WARNING! This will delete all associated cards!");
             Console.WriteLine($"Are you sure you want to delete the stack {stackToDelete}?\nTypo \"Yes\" to delete or any other key to go back.");
             string confirmDelete = Console.ReadLine();
 
             if (confirmDelete == "Yes")
             {
-                string deleteStackQuery = $"DELETE FROM cardstacks WHERE cardstackname = @stacktodelete select @@ROWCOUNT;"; 
-                
                 try
                 {
-                    using (SqlConnection sqlConnection = new SqlConnection(connectionString))
+                    SqlConnection sqlConnection = new SqlConnection(connectionString);
+                    sqlConnection.Open();
+
+                    string displayStackQuery = $"DELETE FROM cardstacks WHERE cardstackname ='{stackToDelete}' select @@ROWCOUNT;"; // TODO : parameters
+                    SqlCommand getStacks = new SqlCommand(displayStackQuery, sqlConnection);
+                    int rc = getStacks.ExecuteNonQuery();
+                    sqlConnection.Close();
+
+                    if (rc == 0)
                     {
-                        sqlConnection.Open();
-
-                        using (SqlCommand deleteStack = new SqlCommand(deleteStackQuery, sqlConnection))
+                        while (stackToDelete != "0")
                         {
-                            deleteStack.Parameters.Add(new SqlParameter("@stacktodelete", stackToDelete));
-
-                            int rc = deleteStack.ExecuteNonQuery();
-
-                            if (rc == 0)
-                            {
-                                while (stackToDelete != "0")
-                                {
-                                    Console.WriteLine($"There is no stack named {stackToDelete}. Please enter a valid stack.\nPress Enter...");
-                                    Console.ReadLine();
-
-                                    DeleteStack();
-                                }
-                            }
+                            Console.WriteLine($"There is no stack named {stackToDelete}. Please enter a valid stack.\nPress Enter...");
+                            Console.ReadLine();
+                            DeleteStack();
                         }
                     }
 
                     Console.WriteLine($"Stack Name {stackToDelete} has been deleted.\nPress Enter...");
                     Console.ReadLine();
-
                     DeleteStack();
                 }
                 catch (Exception e)
@@ -127,7 +113,6 @@ namespace FlashCardApp.Controllers
                     Console.WriteLine(e.Message);
                 }
             }
-
             else DeleteStack();
         }
     }

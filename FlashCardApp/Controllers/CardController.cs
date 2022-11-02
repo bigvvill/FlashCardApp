@@ -27,7 +27,7 @@ namespace FlashCardApp.Controllers
             Console.WriteLine("Enter answer text for the back of the card or 0 to go back to Menu");
             string backText = Console.ReadLine();
 
-            string insertQuery = "INSERT INTO cards(cardfront,cardback,stackid) VALUES (@frontText, @backText, @currentStackId);"; 
+            string insertQuery = "INSERT INTO cards(cardfront,cardback,stackid) VALUES (@frontText, @backText}, @currentStackId);"; 
 
             try
             {
@@ -37,9 +37,9 @@ namespace FlashCardApp.Controllers
 
                     using (SqlCommand insertCard = new SqlCommand(insertQuery, sqlConnection))
                     {
-                        insertCard.Parameters.Add(new SqlParameter("@frontText", frontText));
-                        insertCard.Parameters.Add(new SqlParameter("@backText", backText));
-                        insertCard.Parameters.Add(new SqlParameter("@currentstackid", currentStackId));
+                        insertCard.Parameters.Add(new SqlParameter("frontText", frontText));
+                        insertCard.Parameters.Add(new SqlParameter("backText", backText));
+                        insertCard.Parameters.Add(new SqlParameter("currentstackid", currentStackId));
 
                         insertCard.ExecuteNonQuery();
                     }
@@ -92,7 +92,7 @@ namespace FlashCardApp.Controllers
                     using (var tableCmd = connection.CreateCommand())
                     {
                         connection.Open();
-                        tableCmd.CommandText = $"SELECT * FROM cards WHERE stackid = {currentStackId};"; 
+                        tableCmd.CommandText = $"SELECT * FROM cards WHERE stackid = {currentStackId};"; // TODO : parameters
 
                         using (var cardReader = tableCmd.ExecuteReader())
                         {
@@ -121,7 +121,6 @@ namespace FlashCardApp.Controllers
                     Console.WriteLine("Enter question text for front of the card or Enter to leave as is");
                     Console.WriteLine($"Current Text: {cardList[cardId-1].CardFront}");
                     string frontText = Console.ReadLine();
-
                     Console.WriteLine("Enter answer text for the back of the card or Enter to leave as is");
                     Console.WriteLine($"Current Text: {cardList[cardId - 1].CardBack}");
                     string backText = Console.ReadLine();
@@ -139,8 +138,8 @@ namespace FlashCardApp.Controllers
                         {
                             using (SqlCommand insertFront = new SqlCommand(frontQuery, connection))
                             {
-                                insertFront.Parameters.Add(new SqlParameter("@backtext", backText));
-                                insertFront.Parameters.Add(new SqlParameter("@cardlist", cardList[cardId - 1].Id));
+                                insertFront.Parameters.Add(new SqlParameter("backtext", backText));
+                                insertFront.Parameters.Add(new SqlParameter("cardlist", cardList[cardId - 1].Id));
 
                                 insertFront.ExecuteNonQuery();
                             }
@@ -159,8 +158,8 @@ namespace FlashCardApp.Controllers
                         {
                             using (SqlCommand insertBack = new SqlCommand(backQuery, connection))
                             {
-                                insertBack.Parameters.Add(new SqlParameter("@fronttext", frontText));
-                                insertBack.Parameters.Add(new SqlParameter("@cardlist", cardList[cardId - 1].Id));
+                                insertBack.Parameters.Add(new SqlParameter("fronttext", frontText));
+                                insertBack.Parameters.Add(new SqlParameter("cardlist", cardList[cardId - 1].Id));
 
                                 insertBack.ExecuteNonQuery();
                             }
@@ -173,14 +172,14 @@ namespace FlashCardApp.Controllers
 
                     else 
                     {
-                        string bothQuery = "UPDATE cards SET cardback = @backtext WHERE Id = @cardlist;";
+                        string bothQuery = $"UPDATE cards SET cardback = @backtext WHERE Id = @cardlist;";
 
                         try
                         {
                             using (SqlCommand insertBoth = new SqlCommand(bothQuery, connection))
                             {
-                                insertBoth.Parameters.Add(new SqlParameter("@backtext", backText));
-                                insertBoth.Parameters.Add(new SqlParameter("@cardlist", cardList[cardId - 1].Id));
+                                insertBoth.Parameters.Add(new SqlParameter("backtext", backText));
+                                insertBoth.Parameters.Add(new SqlParameter("cardlist", cardList[cardId - 1].Id));
 
                                 insertBoth.ExecuteNonQuery();
                             }
@@ -238,7 +237,7 @@ namespace FlashCardApp.Controllers
                     using (var tableCmd = connection.CreateCommand())
                     {
                         connection.Open();
-                        tableCmd.CommandText = $"SELECT * FROM cards WHERE stackid = {currentStackId};"; 
+                        tableCmd.CommandText = $"SELECT * FROM cards WHERE stackid = {currentStackId};"; // TODO : parameters
 
                         using (var cardReader = tableCmd.ExecuteReader())
                         {
@@ -262,26 +261,13 @@ namespace FlashCardApp.Controllers
                         }
                     }
 
-                    string deleteQuery = "DELETE FROM cards WHERE Id = @cardid;"; 
-
-                    try
-                    {
-                        using (SqlCommand deleteCard = new SqlCommand(deleteQuery, connection))
-                        {
-                            deleteCard.Parameters.Add(new SqlParameter("@cardid", cardList[cardId - 1].Id));
-
-                            deleteCard.ExecuteNonQuery();
-                        }
-                    }
-                    catch (Exception e)
-                    {
-
-                        Console.WriteLine(e.Message);
-                    }
+                    string insertQuery = $"DELETE FROM cards WHERE Id = {cardList[cardId - 1].Id};"; // TODO : parameters
+                    SqlCommand insertCard = new SqlCommand(insertQuery, connection);
+                    insertCard.ExecuteNonQuery();
+                    //connection.Close();
 
                     Console.WriteLine("Card Deleted. Press Enter...");
                     Console.ReadLine();
-
                     DeleteCard(currentStack, currentStackId);
                 }
             }

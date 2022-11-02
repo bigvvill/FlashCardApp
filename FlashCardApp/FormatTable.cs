@@ -25,14 +25,6 @@ namespace FlashCardApp
                 .ExportAndWriteLine();
         }
 
-        internal static void ShowSessionTable<T>(List<T> tableData) where T : class
-        {
-            ConsoleTableBuilder
-                .From(tableData)
-                .WithTitle("Sessions")
-                .ExportAndWriteLine();
-        }
-
         internal static void ShowFrontCard<T>(string stack, List<T> tableData) where T : class
         {
             ConsoleTableBuilder
@@ -48,7 +40,5 @@ namespace FlashCardApp
                 .WithTitle("Cards")
                 .ExportAndWriteLine();
         }
-
-        
     }
 }
