@@ -37,9 +37,9 @@ namespace FlashCardApp.Controllers
 
                     using (SqlCommand insertCard = new SqlCommand(insertQuery, sqlConnection))
                     {
-                        insertCard.Parameters.Add(new SqlParameter("frontText", frontText));
-                        insertCard.Parameters.Add(new SqlParameter("backText", backText));
-                        insertCard.Parameters.Add(new SqlParameter("currentstackid", currentStackId));
+                        insertCard.Parameters.Add(new SqlParameter("@frontText", frontText));
+                        insertCard.Parameters.Add(new SqlParameter("@backText", backText));
+                        insertCard.Parameters.Add(new SqlParameter("@currentstackid", currentStackId));
 
                         insertCard.ExecuteNonQuery();
                     }
@@ -138,8 +138,8 @@ namespace FlashCardApp.Controllers
                         {
                             using (SqlCommand insertFront = new SqlCommand(frontQuery, connection))
                             {
-                                insertFront.Parameters.Add(new SqlParameter("backtext", backText));
-                                insertFront.Parameters.Add(new SqlParameter("cardlist", cardList[cardId - 1].Id));
+                                insertFront.Parameters.Add(new SqlParameter("@backtext", backText));
+                                insertFront.Parameters.Add(new SqlParameter("@cardlist", cardList[cardId - 1].Id));
 
                                 insertFront.ExecuteNonQuery();
                             }
@@ -158,8 +158,8 @@ namespace FlashCardApp.Controllers
                         {
                             using (SqlCommand insertBack = new SqlCommand(backQuery, connection))
                             {
-                                insertBack.Parameters.Add(new SqlParameter("fronttext", frontText));
-                                insertBack.Parameters.Add(new SqlParameter("cardlist", cardList[cardId - 1].Id));
+                                insertBack.Parameters.Add(new SqlParameter("@fronttext", frontText));
+                                insertBack.Parameters.Add(new SqlParameter("@cardlist", cardList[cardId - 1].Id));
 
                                 insertBack.ExecuteNonQuery();
                             }
@@ -178,8 +178,8 @@ namespace FlashCardApp.Controllers
                         {
                             using (SqlCommand insertBoth = new SqlCommand(bothQuery, connection))
                             {
-                                insertBoth.Parameters.Add(new SqlParameter("backtext", backText));
-                                insertBoth.Parameters.Add(new SqlParameter("cardlist", cardList[cardId - 1].Id));
+                                insertBoth.Parameters.Add(new SqlParameter("@backtext", backText));
+                                insertBoth.Parameters.Add(new SqlParameter("@cardlist", cardList[cardId - 1].Id));
 
                                 insertBoth.ExecuteNonQuery();
                             }

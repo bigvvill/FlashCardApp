@@ -235,10 +235,10 @@ namespace FlashCardApp.Controllers
 
                     using (SqlCommand command = new SqlCommand(commandText, sqlConnection))
                     {
-                        command.Parameters.Add(new SqlParameter("sessionTime", sessionTime));
-                        command.Parameters.Add(new SqlParameter("numberCorrect", numberCorrect));
-                        command.Parameters.Add(new SqlParameter("numberTotal", numberTotal));
-                        command.Parameters.Add(new SqlParameter("stackSelection", stackSelection));
+                        command.Parameters.Add(new SqlParameter("@sessionTime", sessionTime));
+                        command.Parameters.Add(new SqlParameter("@numberCorrect", numberCorrect));
+                        command.Parameters.Add(new SqlParameter("@numberTotal", numberTotal));
+                        command.Parameters.Add(new SqlParameter("@stackSelection", stackSelection));
 
                         command.ExecuteNonQuery();
                     }
