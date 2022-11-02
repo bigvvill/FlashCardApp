@@ -32,7 +32,7 @@ namespace FlashCardApp.Controllers
                 using (var tableCmd = connection.CreateCommand())
                 {
                     connection.Open();
-                    tableCmd.CommandText = $"SELECT * FROM cards WHERE stackid = {stackSelectionId};"; // TODO : perameters
+                    tableCmd.CommandText = $"SELECT * FROM cards WHERE stackid = {stackSelectionId};"; 
 
                     using (var cardReader = tableCmd.ExecuteReader())
                     {
@@ -80,7 +80,7 @@ namespace FlashCardApp.Controllers
                 using (var tableCmd = connection.CreateCommand())
                 {
                     connection.Open();
-                    tableCmd.CommandText = $"SELECT * FROM cards WHERE stackid = {stackSelectionId};"; // TODO : parameters
+                    tableCmd.CommandText = $"SELECT * FROM cards WHERE stackid = {stackSelectionId};"; 
 
                     using (var cardReader = tableCmd.ExecuteReader())
                     {
@@ -225,7 +225,7 @@ namespace FlashCardApp.Controllers
 
         public void SaveSession(DateTime sessionTime, int numberCorrect, int numberTotal, string stackSelection, int stackSelectionId)
         {
-            string commandText = "INSERT INTO sessions(sessiontime,numbercorrect,numbertotal, stack) VALUES (@sessionTime,@numberCorrect,@numberTotal,@stackSelection);";
+            string commandText = "INSERT INTO sessions(sessiontime,numbercorrect,numbertotal,stack, sessionstackid) VALUES (@sessionTime,@numberCorrect,@numberTotal,@stackSelection, @stackSelectionId);";
 
             try
             {
@@ -235,10 +235,11 @@ namespace FlashCardApp.Controllers
 
                     using (SqlCommand command = new SqlCommand(commandText, sqlConnection))
                     {
-                        command.Parameters.Add(new SqlParameter("sessionTime", sessionTime));
-                        command.Parameters.Add(new SqlParameter("numberCorrect", numberCorrect));
-                        command.Parameters.Add(new SqlParameter("numberTotal", numberTotal));
-                        command.Parameters.Add(new SqlParameter("stackSelection", stackSelection));
+                        command.Parameters.Add(new SqlParameter("@sessionTime", sessionTime));
+                        command.Parameters.Add(new SqlParameter("@numberCorrect", numberCorrect));
+                        command.Parameters.Add(new SqlParameter("@numberTotal", numberTotal));
+                        command.Parameters.Add(new SqlParameter("@stackSelection", stackSelection));
+                        command.Parameters.Add(new SqlParameter("@stackSelectionid", stackSelectionId));
 
                         command.ExecuteNonQuery();
                     }

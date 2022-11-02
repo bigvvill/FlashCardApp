@@ -1,6 +1,7 @@
 ﻿using FlashCardApp.Controllers;
 using FlashCardApp.Dtos.CardDtos;
 using FlashCardApp.Dtos.CardStack;
+using FlashCardApp.Dtos.SessionDtos;
 using FlashCardApp.Dtos.StudyCardDtos;
 using System;
 using System.Collections.Generic;
@@ -67,7 +68,7 @@ namespace FlashCardApp
                     using (var tableCmd = connection.CreateCommand())
                     {
                         connection.Open();
-                        tableCmd.CommandText = $"SELECT * FROM cards WHERE stackId = {currentStackId};"; // TODO : parameters
+                        tableCmd.CommandText = $"SELECT * FROM cards WHERE stackId = {currentStackId};"; 
 
                         using (var stackReader = tableCmd.ExecuteReader())
                         {
@@ -138,38 +139,35 @@ namespace FlashCardApp
             studyController.GetUserInput("back", stackSelection, cardFront, cardBack, stackSelectionId, numberCorrect, numberTotal);
         }
 
-        internal void DisplayData(string stackSelection, int currentStackId) // TODO : Fix this
+        internal void DisplayData() 
         {
             try
             {
-                List<CardListReadOnlyDto> tableData = new List<CardListReadOnlyDto>();
+                List<SessionStatsDto> tableData = new List<SessionStatsDto>();
                 using (var connection = new SqlConnection(connectionString))
                 {
                     using (var tableCmd = connection.CreateCommand())
                     {
                         connection.Open();
-                        tableCmd.CommandText = $"SELECT stack, SUM(numbercorrect) as correct, SUM(numbertotal) as total FROM sessions WHERE stack = {currentStackId} GROUP BY stack;"; // TODO : parameters
-
-                        // SELECT stack, SUM(numbercorrect) as correct, SUM(numbertotal) as total FROM sessions WHERE stack = 'spanish' AND sessiontime >= '10.30.2022 22:57:00' GROUP BY stack;
+                        tableCmd.CommandText = "SELECT stack, SUM(numbercorrect) as correct, SUM(numbertotal) as total, CAST(CAST(SUM(numbercorrect) as DECIMAL(4,2))/CAST(SUM(numbertotal) as DECIMAL(4,2)) as DECIMAL(6,2))*100 AS Result FROM sessions GROUP BY stack;"; 
 
                         using (var stackReader = tableCmd.ExecuteReader())
-                        {
-                            int listNumber = 1;
-
+                        {                    
                             if (stackReader.HasRows)
                             {
                                 while (stackReader.Read())
                                 {
 
                                     tableData.Add(
-                                    new CardListReadOnlyDto
+                                    new SessionStatsDto
                                     {
-                                        Id = listNumber,
-                                        Front = stackReader.GetString(1),
-                                        Back = stackReader.GetString(2)
-                                    });
+                                        Stack = stackReader.GetString(0),
+                                        Correct = stackReader.GetInt32(1),
+                                        Total = stackReader.GetInt32(2),
+                                        Percentage = stackReader.GetDecimal(3)
+                                    });;
 
-                                    listNumber++;
+                                    
                                 }
                             }
                             else
@@ -180,7 +178,10 @@ namespace FlashCardApp
                     }
 
                     Console.Clear();
-                    FormatTable.ShowCardTable(tableData);
+                    FormatTable.ShowSessionTable(tableData);
+
+                    Console.WriteLine("Press Enter to return to Menu...");
+                    Console.ReadLine();
                 }
             }
             catch (Exception e)
