@@ -1,6 +1,2 @@
-﻿using FlashCardApp;
-using System.Data.SqlClient;
-
-GetUserInput getUserInput = new GetUserInput();
-
-getUserInput.MainMenu();
+﻿// See https://aka.ms/new-console-template for more information
+Console.WriteLine("Hello, World!");
