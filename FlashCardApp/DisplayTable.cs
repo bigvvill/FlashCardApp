@@ -3,12 +3,7 @@ using FlashCardApp.Dtos.CardDtos;
 using FlashCardApp.Dtos.CardStack;
 using FlashCardApp.Dtos.SessionDtos;
 using FlashCardApp.Dtos.StudyCardDtos;
-using System;
-using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FlashCardApp
 {
@@ -58,8 +53,10 @@ namespace FlashCardApp
             }
         }
 
-        internal void DisplayCardList(int currentStackId)
+        internal int DisplayCardList(int currentStackId)
         {
+            int listNumber = 1;
+
             try
             {
                 List<CardListReadOnlyDto> tableData = new List<CardListReadOnlyDto>();
@@ -72,7 +69,7 @@ namespace FlashCardApp
 
                         using (var stackReader = tableCmd.ExecuteReader())
                         {
-                            int listNumber = 1;
+                            
 
                             if (stackReader.HasRows)
                             {
@@ -90,10 +87,14 @@ namespace FlashCardApp
                                     listNumber++;
                                 }
                             }
+
                             else
                             {
                                 Console.WriteLine("\nNo rows found.\n");
+                                listNumber = 0;
                             }
+
+                            
                         }
                     }
 
@@ -105,6 +106,8 @@ namespace FlashCardApp
             {
                 Console.WriteLine(e.Message);
             }
+
+            return listNumber;
         }
 
         internal void DisplayFrontCard(string stackSelection, string cardFront, string cardBack, int stackSelectionId, int numberCorrect, int numberTotal)

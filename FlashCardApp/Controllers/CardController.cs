@@ -64,7 +64,7 @@ namespace FlashCardApp.Controllers
             DisplayTable displayTable = new DisplayTable();
 
             Console.Clear();
-            displayTable.DisplayCardList(currentStackId);
+            int numRows = displayTable.DisplayCardList(currentStackId);
 
             Console.WriteLine("Choose a card Id to edit or 0 to return to Menu");
             string cardToEdit = Console.ReadLine();
@@ -80,6 +80,14 @@ namespace FlashCardApp.Controllers
 
             if (cardToEdit == "0")
             {
+                getUserInput.CardMenu(currentStack, currentStackId);
+            }
+
+            if (cardId > numRows - 1 || cardId < 0)
+            {
+                Console.WriteLine("Invalid Card Number. Press Enter...");
+                Console.ReadLine();
+
                 getUserInput.CardMenu(currentStack, currentStackId);
             }
 
@@ -112,8 +120,10 @@ namespace FlashCardApp.Controllers
 
                             else
                             {
-                                Console.WriteLine("\nNo rows found.\n");
+                                Console.WriteLine("\nThere are no cards to Edit.\n");
                                 Console.ReadLine();
+
+                                getUserInput.CardMenu(currentStack, currentStackId);
                             }
                         }
                     }
@@ -185,10 +195,10 @@ namespace FlashCardApp.Controllers
                                 insertBoth.ExecuteNonQuery();
                             }
                         }
-                        catch (Exception)
+                        catch (Exception e)
                         {
 
-                            throw;
+                            Console.WriteLine(e.Message);
                         }
                     }
 
@@ -211,7 +221,7 @@ namespace FlashCardApp.Controllers
             DisplayTable displayTable = new DisplayTable();
 
             Console.Clear();
-            displayTable.DisplayCardList(currentStackId);
+            int numRows = displayTable.DisplayCardList(currentStackId);
 
             Console.WriteLine("Choose a card Id to delete or 0 to return to Menu");
             string cardToDelete = Console.ReadLine();
@@ -227,6 +237,14 @@ namespace FlashCardApp.Controllers
 
             if (cardToDelete == "0")
             {
+                getUserInput.CardMenu(currentStack, currentStackId);
+            }
+
+            if (cardId > numRows - 1 || cardId < 0)
+            {
+                Console.WriteLine("Invalid Card Number. Press Enter...");
+                Console.ReadLine();
+
                 getUserInput.CardMenu(currentStack, currentStackId);
             }
 
@@ -256,8 +274,10 @@ namespace FlashCardApp.Controllers
 
                             else
                             {
-                                Console.WriteLine("\nNo rows found.\n");
+                                Console.WriteLine("\nThere are no rows to Delete.\n");
                                 Console.ReadLine();
+
+                                getUserInput.CardMenu(currentStack, currentStackId);
                             }
                         }
                     }

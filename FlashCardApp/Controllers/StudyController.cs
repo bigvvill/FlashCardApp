@@ -1,13 +1,6 @@
-﻿using FlashCardApp.Dtos.CardDtos;
-using FlashCardApp.Dtos.StudyCardDtos;
-using FlashCardApp.Models;
-using System;
-using System.Collections.Generic;
+﻿using FlashCardApp.Models;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace FlashCardApp.Controllers
 {
